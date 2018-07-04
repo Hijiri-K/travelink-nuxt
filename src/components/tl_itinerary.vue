@@ -31,7 +31,7 @@
        </div>
 
          <transition-group tag="div" name="itinerary-transition">
-           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces" v-bind:key="place.id">
+           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlacesOrder(day.id)" v-bind:key="place.id">
              <div class="time-line-wrapper inline-block">
                <div class="time-line__line-wrapper inline-block">
                  <div class="time-line__line">
@@ -113,6 +113,8 @@ var initial_time = {hours: 9, minutes: 0}
 var plan_start_time = moment(initial_time);
 var plan_start_time_show = plan_start_time.format("H:mm")
 var end_time = moment(initial_time).format("H:mm");
+var before_hotels= []
+
 
 export default {
   props: ['planningPlaces','stay_nights'],
@@ -126,7 +128,7 @@ export default {
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
           end: moment({hours: 11, minutes: 0}).format("H:mm")
         },
-        clearable:false
+        clearable:false,
     };
   },
   methods:{
@@ -154,6 +156,14 @@ export default {
     var test = moment(this.start_time,"H: mm")
     initial_time = test
     this.start_time_show = test.format("H:mm")
+  },
+  planningPlacesOrder: function(day){
+    console.log(this.planningPlaces)
+    var day_planning = this.planningPlaces.filter(function(place){
+      return place.day == day;
+    })
+    console.log(day_planning)
+    return day_planning
   }
 }
 }

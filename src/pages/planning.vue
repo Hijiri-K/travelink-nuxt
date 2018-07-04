@@ -254,21 +254,19 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
 
 
-var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, unique_id:null, start_time:null},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, unique_id:null, start_time:null},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, unique_id:null, start_time:null},
-              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, unique_id:null, start_time:null}
-
-               // { id:4,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:5,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:6,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:7,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:8,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:9,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:10,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"}
+var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, day:null, start_time:null, default:true},
+              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, day:null, start_time:null, default:0},
+              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, day:null, start_time:null, default:0},
+              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, day:null, start_time:null, default:null},
+              { id:5, place_id:"ChIJQ-VJw2enRjURoUhRDxiecbQ", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
+              { id:6, place_id:"ChIJmaOG0t2mRjUR2TtUWTF2J1E", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
             ]
 
-var planningPlaces = []
+var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
+              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
+              ]
+
+var planningPlaces = [];
 var ordered_places=[];
 
 export default {
@@ -293,20 +291,22 @@ export default {
         }
     },
     methods: {
-      parentsMethod: function(selectedPlaces) {
-        planningPlaces.length = 0
-        planningPlaces.push(...selectedPlaces)
-        console.log(planningPlaces)
-
+      calc_percentage: function(){
         this.percentage=0;
         var totalTime = 0;
         for(var place of planningPlaces){
          var staying = place['staying']+place['distance']
           totalTime += staying
-          this.percentage = Math.round(totalTime/480*100)
+          this.percentage = Math.round(totalTime/480*100/this.stay_nights[this.stay_nights.length-1].id)
           // console.log(totalTime)
         }
          console.log(this.percentage)
+      },
+      parentsMethod: function(selectedPlaces) {
+        planningPlaces.length = 0
+        planningPlaces.push(...selectedPlaces)
+        console.log(planningPlaces)
+
          this.$refs.map.initMap()
 
          var directionsService = new google.maps.DirectionsService;
@@ -314,6 +314,8 @@ export default {
          var before_spots =[];
          var place_ids=[];
          var response_place_ids=[];
+         var day = 1
+         var before_hotels=[];
 
 
 
@@ -325,7 +327,7 @@ export default {
 
          for (var test of planningPlaces){//place_idだけの配列を作成
              place_ids.push(test.place_id)}
-         // console.log(place_ids)
+         console.log(place_ids)
 
 
          if(before_spots.length!=0){
@@ -352,31 +354,48 @@ export default {
              ordered_places.length =0;
              var i = 0;
              var a =  response_place_ids.length-1
+
              var total_duration = 0;
              // console.log(a)
              for(var place_id of response_place_ids){//responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
                var place_id_index = place_ids.indexOf(place_id)
-               planningPlaces[place_id_index].distance=0;
+               var current_place = planningPlaces[place_id_index]
+               current_place.distance=0;
 
                if(place_id_index != -1){
                  if(a!=0){
-                   planningPlaces[place_id_index].distance=0;
-                   planningPlaces[place_id_index].distance= Math.ceil(response.routes[0].legs[i].duration.value/60)+1;
+                   current_place.distance=0;
+                   current_place.distance= Math.ceil(response.routes[0].legs[i].duration.value/60)+1;
                    console.log("ok")
                    a=a-1;
                  }
 
-                  total_duration = total_duration + planningPlaces[place_id_index].staying + planningPlaces[place_id_index].distance
-                  planningPlaces[place_id_index].start_time = total_duration
+                  total_duration = total_duration + current_place.staying + current_place.distance
+                  current_place.start_time = total_duration
+                  current_place.day=0
+                  current_place.day=day
 
-                   ordered_places.push(planningPlaces[place_id_index])
+
+                   ordered_places.push(current_place)
                    console.log(total_duration)
                    i=i+1;
 
                  }
-
+                 if(total_duration>=360){
+                   day++
+                   total_duration=0
+                 }
                }
              // ordered_places[0].distance=0;
+
+             // for(var i=1;i<=day;i++){
+             // var day_planning = ordered_places.filter(function(place){
+             //   return place.day == day;
+             //    })
+             //   before_hotels.push(day_planning[day_planning.length-1])
+             // }
+             //
+             //
              planningPlaces.length = 0
              planningPlaces.push(...ordered_places)
 
@@ -388,7 +407,11 @@ export default {
          });
          // planningPlaces[planningPlaces.length-1].distance=0;
       }
+      this.calc_percentage();
+
     },
+
+
     parentsMethod2: function(schedule){
       this.stay_nights=[];
       var date_calcrate = schedule[1]-schedule[0]
@@ -401,7 +424,10 @@ export default {
       }
 
       console.log(this.stay_nights)
-      }
+      this.calc_percentage();
+    },
+
+
     }
 }
 </script>

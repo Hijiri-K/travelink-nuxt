@@ -1,11 +1,11 @@
 <template>
 <div>
-  <el-checkbox-group class="itinerary-wrapper-wrapper"  v-model="selectedPlaces" fill='#00FFCC'>
+  <el-checkbox-group class="itinerary-wrapper-wrapper"  v-model="selectedPlaces" fill='#00FFCC' :min=min>
       <div class="itinerary-wrapper" v-for="place in places">
         <div class="itinerary-item-wrapper  inline-block">
           <el-card :body-style="{ padding: '0px' }" class="itinerary-item">
             <div class="check-box-wrapper inline-block">
-                <div class="tl-checkbox"><el-checkbox v-bind:label="place" name="" @change='$emit("childs-event", selectedPlaces)'></el-checkbox></div>
+                <div class="tl-checkbox"><el-checkbox v-bind:label="place" name=""  @change='$emit("childs-event", selectedPlaces)'></el-checkbox></div>
             </div><!--
              --><div class="itinerary-item__image inline-block">
                   <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
@@ -114,8 +114,8 @@
     props:['places'],
     data: function() {
       return {
-          selectedPlaces: []
-        // checked: true
+          selectedPlaces: [],
+          min:1
       };
     }
   };
