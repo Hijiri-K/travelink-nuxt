@@ -48,6 +48,7 @@ export default {
           var directionsDisplay = new google.maps.DirectionsRenderer({
               // suppressMarkers: true
           });
+          
           var spots =[];
           // console.log(spots);
           var ordered_places=[];
@@ -68,6 +69,7 @@ export default {
             // var destination = spots[0].location;//最初に選択した場所に帰ってくるルート
             var destination = spots[spots.length-1].location;
 
+
           directionsService.route({
             origin: origin,
             destination: destination,
@@ -77,6 +79,7 @@ export default {
             optimizeWaypoints: true
           }, function(response, status) {
             if (status === 'OK') {
+
               directionsDisplay.setDirections(response);
 
 

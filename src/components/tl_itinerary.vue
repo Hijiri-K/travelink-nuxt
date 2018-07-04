@@ -1,8 +1,10 @@
 <template>
 
   <el-tabs type="card">
-    <div class=""  v-for="day in stay_nights">
-     <el-tab-pane :label='"Day "+day.id'>
+    <!-- <div class=""> -->
+     <el-tab-pane  v-for="day in stay_nights"
+                    :key='day.id'
+                    :label='"Day "+day.id'>
        <div class="itinerary-wrapper-wrapper">
          <div class="" >
          <div class="time-line-wrapper top inline-block">
@@ -17,8 +19,9 @@
          </div>
          <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
            <span>出発：</span> <el-time-select
-                       v-model="start_time"
-                       :picker-options=picker_options
+                         v-model="start_time"
+                         :picker-options=picker_options
+                         :clearable=clearable
                          placeholder="Select time"
                          @change="set_start_time"
                          class="inine-block"
@@ -97,7 +100,7 @@
          </div>
        </div>
      </el-tab-pane>
-    </div>
+    <!-- </div> -->
    </el-tabs>
 
 </template>
@@ -121,8 +124,9 @@ export default {
         picker_options:{
           start: moment({hours: 9, minutes: 0}).format("H:mm"),
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
-          end: moment({hours: 11, minutes: 0}).format("H:mm"),
-          }
+          end: moment({hours: 11, minutes: 0}).format("H:mm")
+        },
+        clearable:false
     };
   },
   methods:{

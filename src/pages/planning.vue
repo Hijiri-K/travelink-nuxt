@@ -269,8 +269,8 @@ var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅'
             ]
 
 var planningPlaces = []
-
 var ordered_places=[];
+
 export default {
   components: {
     TlHeader,
@@ -288,7 +288,7 @@ export default {
             places:places,
             activeName:'itinerary',
             ordered_places:ordered_places,
-            stay_nights:[{id:1,day:1}],
+            stay_nights:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
             styleObject: {transform: 'translateX(0)'}
         }
     },
@@ -301,9 +301,9 @@ export default {
         this.percentage=0;
         var totalTime = 0;
         for(var place of planningPlaces){
-         var staying = place['staying']
+         var staying = place['staying']+place['distance']
           totalTime += staying
-          this.percentage = totalTime/480*100
+          this.percentage = Math.round(totalTime/480*100)
           // console.log(totalTime)
         }
          console.log(this.percentage)
@@ -364,20 +364,18 @@ export default {
                    planningPlaces[place_id_index].distance= Math.ceil(response.routes[0].legs[i].duration.value/60)+1;
                    console.log("ok")
                    a=a-1;
-                 }else{
-               console.log("no")
-               // planningPlaces[place_id_index].distance=0;
-             }
-              total_duration = total_duration + planningPlaces[place_id_index].staying + planningPlaces[place_id_index].distance
-              planningPlaces[place_id_index].start_time = total_duration
-              planningPlaces[place_id_index].unique_id=i;
-               ordered_places.push(planningPlaces[place_id_index])
-               console.log(total_duration)
-               i=i+1;
+                 }
 
-             }
+                  total_duration = total_duration + planningPlaces[place_id_index].staying + planningPlaces[place_id_index].distance
+                  planningPlaces[place_id_index].start_time = total_duration
 
-             }
+                   ordered_places.push(planningPlaces[place_id_index])
+                   console.log(total_duration)
+                   i=i+1;
+
+                 }
+
+               }
              // ordered_places[0].distance=0;
              planningPlaces.length = 0
              planningPlaces.push(...ordered_places)
@@ -397,7 +395,7 @@ export default {
       var stay_nights = date_calcrate/86400000+1
       // console.log(stay_nights)
 
-      for(var i=stay_nights;i>=1;i--){
+      for(var i=1;i<=stay_nights;i++){
         this.stay_nights.push({'id':i, 'day':i})
         this.stay_nights.sort()
       }

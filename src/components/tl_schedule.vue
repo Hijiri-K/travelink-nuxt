@@ -7,6 +7,7 @@
             range-separator="To"
             start-placeholder="Start date"
             end-placeholder="End date" class="inine-block"
+            :clearable=clearable
             @change='$emit("childs-event", schedule)'
             >
           </el-date-picker>
@@ -21,13 +22,15 @@
 </template>
 
 <script>
+import moment from 'moment';
 
   export default {
     props: ['percentage'],
     data() {
       return {
-        schedule: '',
-        stay_nights: 0
+        schedule: [moment().add(7, 'days'),moment().add(9, 'days')],
+        stay_nights: 0,
+        clearable:false
       };
     },
     methods:{
