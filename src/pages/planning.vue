@@ -18,7 +18,7 @@
           <el-tabs class="smartphone-view"  v-model="activeName">
             <el-tab-pane label="Itinerary" name="itinerary">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"></tl-schedule>
-              <tl-itinerary v-bind:planningPlaces="planningPlaces v-bind:stay_nights="stay_nights""></tl-itinerary>
+              <tl-itinerary v-bind:planningPlaces="planningPlaces" v-bind:stay_nights="stay_nights" v-bind:hotels="hotels"></tl-itinerary>
             </el-tab-pane>
             <el-tab-pane label="Edit"  name="edit">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
@@ -36,7 +36,7 @@
 <!-- PC,iPad用 -->
       <el-row :gutter="20" class="hidden-xs-only">
         <el-col :span=12 id="itinerary-box">
-            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:stay_nights="stay_nights"></tl-itinerary>
+            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:stay_nights="stay_nights" v-bind:hotels="hotels"></tl-itinerary>
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
@@ -257,17 +257,20 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, day:null, start_time:null, default:true},
               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, day:null, start_time:null, default:0},
               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, day:null, start_time:null, default:0},
-              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, day:null, start_time:null, default:null},
-              { id:5, place_id:"ChIJQ-VJw2enRjURoUhRDxiecbQ", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
-              { id:6, place_id:"ChIJmaOG0t2mRjUR2TtUWTF2J1E", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
-            ]
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685,　lng:131.369048}, distance:0, day:null, start_time:null, default:true},
+              { id:5, place_id:"ChIJsQqC1jGoRjURUqzYIaD7zxw", title: '九州自然動物公園アフリカンサファリ', group: '宿', staying:120, discription: 'たくさんの珍しい動物たちを車の中から観察できるサファリ動物園。', price: 120, currency:"$", location:{lat:33.354042, lng:131.411499 }, distance:0, day:null, start_time:null, default:false},
+              { id:6, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, distance:0, day:null, start_time:null, default:false},
+              ]
 
 var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
-              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
+              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null},
+              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, day:null, start_time:null, default:null},
               ]
 
 var planningPlaces = [];
 var ordered_places=[];
+
+var planning_hotels = [];
 
 export default {
   components: {
@@ -282,6 +285,7 @@ export default {
         return {
             percentage: 0,
             places:places,
+            hotels:hotels,
             planningPlaces:planningPlaces,
             places:places,
             activeName:'itinerary',
@@ -359,18 +363,18 @@ export default {
              // console.log(a)
              for(var place_id of response_place_ids){//responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
                var place_id_index = place_ids.indexOf(place_id)
-               var current_place = planningPlaces[place_id_index]
+               var current_place = planningPlaces[place_id_index]//indexOfで判明したインデックスを使って、該当の配列をplanningPlacesから取得する。
                current_place.distance=0;
 
-               if(place_id_index != -1){
-                 if(a!=0){
+               if(place_id_index != -1){//originとdistinationのindexは見つからず、-1でindexOfの結果が返ってくるため、それを除外する。
+                 if(a!=0){//distinationで指定している最後の到着場所にはAPIから移動時間が返ってきていなくてエラーになる為、最後のplaceのみ処理から除外。
                    current_place.distance=0;
-                   current_place.distance= Math.ceil(response.routes[0].legs[i].duration.value/60)+1;
+                   current_place.distance= Math.ceil(response.routes[0].legs[i].duration.value/60);//APIから帰ってきた移動時間を該当の配列のdistanceのkeyに代入する。
                    console.log("ok")
                    a=a-1;
                  }
 
-                  total_duration = total_duration + current_place.staying + current_place.distance
+                  total_duration = total_duration + current_place.staying + current_place.distance//これまでの場所のの滞在時間と移動時間の合計をtotal_durationに代入
                   current_place.start_time = total_duration
                   current_place.day=0
                   current_place.day=day
@@ -381,23 +385,90 @@ export default {
                    i=i+1;
 
                  }
-                 if(total_duration>=360){
-                   day++
-                   total_duration=0
-                 }
+                 if(total_duration>=360){       //総計時間が360分を超える度に日程を一つ足していく
+                       day++                    //TODO：ここで、ordered_placesを配列にしてplanningPlacesにpush  planningPlace.push([ordered_places])
+                       total_duration=0         //TODO:そして、ordered_placesをクリーンにする
+                     }
                }
-             // ordered_places[0].distance=0;
 
-             // for(var i=1;i<=day;i++){
-             // var day_planning = ordered_places.filter(function(place){
-             //   return place.day == day;
-             //    })
-             //   before_hotels.push(day_planning[day_planning.length-1])
-             // }
-             //
-             //
-             planningPlaces.length = 0
-             planningPlaces.push(...ordered_places)
+
+              var hotels_locations=[]
+              var last_activitis=[]
+              var last_activitis_locations=[]
+              var hotel_durations=[]
+              for(var test of hotels){
+                test.day=null}
+
+              for(var date=1;date<=3;date++){
+                hotel_durations=[]
+                hotels_locations=[]
+                for(var hotel of hotels){//place_idだけの配列を作成
+                  if(hotel.day===null){
+                hotels_locations.push(hotel.location)
+              }
+              }
+              function get_daily_plan(date1){
+              var daily_plan = ordered_places.filter(function(place){  //この処理が先行してしまい、以下の処理のdaily_planが全て最終版で行われてしまう。
+                return place.day == date1;
+              })
+              console.log(daily_plan[daily_plan.length-1].location)
+              return daily_plan[daily_plan.length-1].location
+            }
+              // console.log(daily_plan);
+
+              // var last_activity = daily_plan[daily_plan.length-1]
+
+            var distanceMatrixService = new google.maps.DistanceMatrixService();
+
+            // var origins = [last_activity.location]
+            // console.log(origins)
+            // 到着点
+            // var destinations = hotels_locations;
+            hotel_durations=[]
+            distanceMatrixService.getDistanceMatrix({
+              	origins: [get_daily_plan(date)], // 出発地点
+              	destinations: hotels_locations, // 到着地点
+              	travelMode: google.maps.TravelMode.DRIVING, // 車モード or 徒歩モード
+              }, function(response, status) {
+              	if (status == google.maps.DistanceMatrixStatus.OK) {
+                  console.log(response)
+
+              		// 出発地点と到着地点の住所（配列）を取得
+              		var origins = response.originAddresses;
+              		var destinations = response.destinationAddresses;
+
+              		// 出発地点でループ
+              		for (var i=0; i<origins.length; i++) {
+              			// 出発地点から到着地点への計算結果を取得
+              			var results = response.rows[i].elements;
+
+              			// 到着地点でループ
+              			for (var j = 0; j<results.length; j++) {
+              				var from = origins[i]; // 出発地点の住所
+              				var to = destinations[j]; // 到着地点の住所
+              				var duration = results[j].duration.value; // 時間
+              				var distance = results[j].distance.value; // 距離
+                      hotel_durations.push(duration)
+              				console.log(from,  to, duration, distance);
+              			}
+                    console.log(hotel_durations);
+                    var nearest_hotel = hotel_durations.indexOf(Math.min.apply(null,hotel_durations))
+                    if(hotels[nearest_hotel].day===null){
+                    hotels[nearest_hotel].day=null
+                    // date++
+                    hotels[nearest_hotel].day=date-1;
+                    }
+                    hotel_durations=[]
+                    console.log(hotels[nearest_hotel]);
+                    planningPlaces.length = 0
+                    planningPlaces.push(...ordered_places)
+              		}
+              	}
+              });
+            }
+
+             // planningPlaces.length = 0
+             // planningPlaces.push(...ordered_places)
 
              console.log(planningPlaces)
            } else {

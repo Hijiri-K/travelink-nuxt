@@ -25,6 +25,7 @@
                          placeholder="Select time"
                          @change="set_start_time"
                          class="inine-block"
+                         :key='day.id'
                         >
                      </el-time-select>
          </el-card>
@@ -117,7 +118,7 @@ var before_hotels= []
 
 
 export default {
-  props: ['planningPlaces','stay_nights'],
+  props: ['planningPlaces','stay_nights','hotels'],
   data() {
     return {
         start_time_show:plan_start_time_show,
@@ -162,8 +163,13 @@ export default {
     var day_planning = this.planningPlaces.filter(function(place){
       return place.day == day;
     })
+
+    var day_hotel_planning = this.hotels.filter(function(place){
+      return place.day == day;
+    })
+    var day_complete_planning = day_planning.concat(day_hotel_planning)
     console.log(day_planning)
-    return day_planning
+    return day_complete_planning
   }
 }
 }
