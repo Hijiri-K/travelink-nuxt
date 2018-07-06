@@ -48,7 +48,7 @@ export default {
           var directionsDisplay = new google.maps.DirectionsRenderer({
               // suppressMarkers: true
           });
-          
+
           var spots =[];
           // console.log(spots);
           var ordered_places=[];
@@ -87,7 +87,7 @@ export default {
 
               // for (var response_place_id of response.geocoded_waypoints){//responseのplace_idのみの配列を作る
               //     response_place_ids.push(response_place_id.place_id)}
-              // // console.log(response_place_ids)
+              // console.log(response_place_ids)
               // ordered_places.length =0;
               //
               // for(var place_id of response_place_ids){//responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。

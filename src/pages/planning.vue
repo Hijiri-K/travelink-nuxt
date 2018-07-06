@@ -18,11 +18,11 @@
           <el-tabs class="smartphone-view"  v-model="activeName">
             <el-tab-pane label="Itinerary" name="itinerary">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"></tl-schedule>
-              <tl-itinerary v-bind:planningPlaces="planningPlaces v-bind:stay_nights="stay_nights""></tl-itinerary>
+              <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces v-bind:hotels="hotels" v-bind:stay_nights="stay_nights" v-bind:daily_plans="daily_plans"></tl-itinerary>
             </el-tab-pane>
             <el-tab-pane label="Edit"  name="edit">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
-              <tl-itinerary-edit v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+              <tl-itinerary-edit v-bind:places="places" v-bind:hotels="hotels" @childs-event="parentsMethod" @childs-event3="parentsMethod3" class="itinerary-edit-wrapper"></tl-itinerary-edit>
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -36,11 +36,11 @@
 <!-- PC,iPad用 -->
       <el-row :gutter="20" class="hidden-xs-only">
         <el-col :span=12 id="itinerary-box">
-            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:stay_nights="stay_nights"></tl-itinerary>
+            <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces" v-bind:hotels="hotels" v-bind:daily_plans="daily_plans"　v-bind:stay_nights="stay_nights"></tl-itinerary>
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
-          <tl-itinerary-edit v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+          <tl-itinerary-edit v-bind:places="places" v-bind:hotels="hotels" @childs-event="parentsMethod" @childs-event3="parentsMethod3" class="itinerary-edit-wrapper"></tl-itinerary-edit>
         </el-col>
       </el-row>
 
@@ -255,19 +255,22 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
 
 var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, day:null, start_time:null, default:true},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, day:null, start_time:null, default:0},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, day:null, start_time:null, default:0},
-              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, day:null, start_time:null, default:null},
-              { id:5, place_id:"ChIJQ-VJw2enRjURoUhRDxiecbQ", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
-              { id:6, place_id:"ChIJmaOG0t2mRjUR2TtUWTF2J1E", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
+              { id:2, place_id:"ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,　lng:131.357272}, distance:0, day:null, start_time:null, default:true},
+              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:120, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, day:null, start_time:null, default:true},
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685,　lng:131.369048}, distance:0, day:null, start_time:null, default:true},
+              { id:5, place_id:"ChIJsQqC1jGoRjURUqzYIaD7zxw", title: '九州自然動物公園アフリカンサファリ', group: '宿', staying:120, discription: 'たくさんの珍しい動物たちを車の中から観察できるサファリ動物園。', price: 120, currency:"$", location:{lat:33.354042, lng:131.411499 }, distance:0, day:null, start_time:null, default:false},
+              { id:6, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, distance:0, day:null, start_time:null, default:false}
             ]
 
-var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null},
-              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null}
-              ]
+var hotels = [{ id:11, place_id:"ChIJO3FL6menRjURgLiChIJxWpZw0OvRjUReEV7lBzqj2kDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, distance:0, day:null, start_time:null, default:true},
+              { id:12, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, distance:0, day:null, start_time:null, default:true},
+              { id:13, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, day:null, start_time:null, default:false},
+            ]
 
 var planningPlaces = [];
 var ordered_places=[];
+var daily_plans=[[],[],[],[]]
+
 
 export default {
   components: {
@@ -283,11 +286,12 @@ export default {
             percentage: 0,
             places:places,
             planningPlaces:planningPlaces,
-            places:places,
+            hotels:hotels,
             activeName:'itinerary',
             ordered_places:ordered_places,
             stay_nights:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
-            styleObject: {transform: 'translateX(0)'}
+            styleObject: {transform: 'translateX(0)'},
+            daily_plans:daily_plans
         }
     },
     methods: {
@@ -301,13 +305,17 @@ export default {
           // console.log(totalTime)
         }
          console.log(this.percentage)
+
       },
       parentsMethod: function(selectedPlaces) {
+
+
         planningPlaces.length = 0
         planningPlaces.push(...selectedPlaces)
         console.log(planningPlaces)
 
          this.$refs.map.initMap()
+        this.$refs.itinerary.planningPlacesOrder()
 
          var directionsService = new google.maps.DirectionsService;
          var directionsDisplay = new google.maps.DirectionsRenderer;
@@ -315,7 +323,7 @@ export default {
          var place_ids=[];
          var response_place_ids=[];
          var day = 1
-         var before_hotels=[];
+
 
 
 
@@ -385,21 +393,105 @@ export default {
                    day++
                    total_duration=0
                  }
-               }
-             // ordered_places[0].distance=0;
+               // }
 
-             // for(var i=1;i<=day;i++){
-             // var day_planning = ordered_places.filter(function(place){
-             //   return place.day == day;
-             //    })
-             //   before_hotels.push(day_planning[day_planning.length-1])
-             // }
-             //
-             //
+               // ここにホテルを検索して、配列に組み込むメゾットを入れる
+
+                   // var hotels = this.hotels
+                   var planning_places_hotels=[]
+                   var hotel_durations = []
+                   var planning_places = planningPlaces
+                   var delayed_result = null;
+                   var hotels_locations = []
+
+
+                   // function define_nearest_hotel(){
+                     var day_planning = planning_places.filter(function(place){
+                       return place.day == day;
+                     })
+
+                     for(var test of hotels){//place_idだけの配列を作成
+                         hotels_locations.push(test.location)}
+                     console.log(hotels_locations)
+
+
+                   // console.log(day_planning[day_planning.length-1])
+                   if(day_planning[day_planning.length-1]!==undefined){//undefinedの場合を除いて、各日程の最終のアクティビティーを抽出してbefore_hotelsに追加する。
+
+                     // DistanceMatrix サービスを生成
+                       var distanceMatrixService = new google.maps.DistanceMatrixService();
+
+                       // 出発点
+                       var origins = day_planning[day_planning.length-1].location;
+
+                       // DistanceMatrix の実行
+                       distanceMatrixService.getDistanceMatrix({
+                       	origins: [origins], // 出発地点
+                       	destinations: hotels_locations, // 到着地点
+                       	travelMode: google.maps.TravelMode.DRIVING, // 車モード or 徒歩モード
+
+                       }, function(response, status) {
+                         console.log(response);
+
+                         // var hotel_durations = []
+
+                       	if (status == google.maps.DistanceMatrixStatus.OK) {
+
+                       		// 出発地点と到着地点の住所（配列）を取得
+                       		var origins = response.originAddresses;
+                       		var destinations = response.destinationAddresses;
+
+                       		// 出発地点でループ
+                       		for (var i=0; i<origins.length; i++) {
+                       			// 出発地点から到着地点への計算結果を取得
+                       			var results = response.rows[i].elements;
+
+                       			// 到着地点でループ
+                       			for (var j = 0; j<results.length; j++) {
+                       				var from = origins[i]; // 出発地点の住所
+                       				var to = destinations[j]; // 到着地点の住所
+                       				var duration = results[j].duration.value; // 時間
+                       				// var distance = results[j].distance.value; // 距離
+                       				// console.log(duration);
+                               hotel_durations.push(duration)
+
+                       			}
+                             console.log(hotel_durations);
+
+
+                       		}
+
+                           console.log(hotel_durations.indexOf(Math.min.apply(null,hotel_durations) ));
+                           var nearest_hotel = hotel_durations.indexOf(Math.min.apply(null,hotel_durations) )
+                           console.log(nearest_hotel);
+
+                           hotels[nearest_hotel].day=day
+                           console.log(hotels[nearest_hotel]);
+
+                           day_planning.push(hotels[nearest_hotel])
+                           console.log(day_planning);
+                           daily_plans[day]=[]
+                           daily_plans[day].push(...day_planning)
+                           console.info(daily_plans)
+                       	}
+                       });
+                         console.log(day_planning);
+                     }
+}
+
+
+                     // ここまで
+
+
+
+
+
+
              planningPlaces.length = 0
              planningPlaces.push(...ordered_places)
 
              console.log(planningPlaces)
+
            } else {
              window.alert('Directions request failed due to ' + status);
            }
@@ -408,7 +500,6 @@ export default {
          // planningPlaces[planningPlaces.length-1].distance=0;
       }
       this.calc_percentage();
-
     },
 
 
@@ -426,8 +517,12 @@ export default {
       console.log(this.stay_nights)
       this.calc_percentage();
     },
-
-
+    parentsMethod3: function(selected_hotels){
+      alert(selected_hotels)
     }
+
+
+  },
+
 }
 </script>

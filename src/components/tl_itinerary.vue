@@ -31,7 +31,7 @@
        </div>
 
          <transition-group tag="div" name="itinerary-transition">
-           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlacesOrder(day.id)" v-bind:key="place.id">
+           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in daily_plans[day.id]" v-bind:key="place.id">
              <div class="time-line-wrapper inline-block">
                <div class="time-line__line-wrapper inline-block">
                  <div class="time-line__line">
@@ -113,11 +113,12 @@ var initial_time = {hours: 9, minutes: 0}
 var plan_start_time = moment(initial_time);
 var plan_start_time_show = plan_start_time.format("H:mm")
 var end_time = moment(initial_time).format("H:mm");
-var before_hotels= []
+var hotels = null
+var daily_plans=[[],[],[],[]]
 
 
 export default {
-  props: ['planningPlaces','stay_nights'],
+  props: ['planningPlaces','stay_nights','hotels', 'daily_plans'],
   data() {
     return {
         start_time_show:plan_start_time_show,
@@ -128,7 +129,7 @@ export default {
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
           end: moment({hours: 11, minutes: 0}).format("H:mm")
         },
-        clearable:false,
+        clearable:false
     };
   },
   methods:{
@@ -153,18 +154,106 @@ export default {
   },
   set_start_time: function(){
     console.log(this.start_time)
+    console.log(this.daily_plans)
     var test = moment(this.start_time,"H: mm")
     initial_time = test
     this.start_time_show = test.format("H:mm")
   },
   planningPlacesOrder: function(day){
-    console.log(this.planningPlaces)
-    var day_planning = this.planningPlaces.filter(function(place){
-      return place.day == day;
-    })
-    console.log(day_planning)
-    return day_planning
+    //
+    //
+    // var hotels = this.hotels
+    // var planning_places_hotels=[]
+    // var hotel_durations = []
+    // var planning_places = this.planningPlaces
+    // var delayed_result = null;
+    // var hotels_locations = []
+    // var testtest = this.daily_plans
+    //
+    //
+    // // function define_nearest_hotel(){
+    //   var day_planning = planning_places.filter(function(place){
+    //     return place.day == day;
+    //   })
+    //
+    //   for(var test of hotels){//place_idだけの配列を作成
+    //       hotels_locations.push(test.location)}
+    //   console.log(hotels_locations)
+    //
+    //
+    // // console.log(day_planning[day_planning.length-1])
+    // if(day_planning[day_planning.length-1]!==undefined){//undefinedの場合を除いて、各日程の最終のアクティビティーを抽出してbefore_hotelsに追加する。
+    //
+    //   // DistanceMatrix サービスを生成
+    //     var distanceMatrixService = new google.maps.DistanceMatrixService();
+    //
+    //     // 出発点
+    //     var origins = day_planning[day_planning.length-1].location;
+    //
+    //     // DistanceMatrix の実行
+    //     distanceMatrixService.getDistanceMatrix({
+    //     	origins: [origins], // 出発地点
+    //     	destinations: hotels_locations, // 到着地点
+    //     	travelMode: google.maps.TravelMode.DRIVING, // 車モード or 徒歩モード
+    //
+    //     }, function(response, status) {
+    //       console.log(response);
+    //
+    //       // var hotel_durations = []
+    //
+    //     	if (status == google.maps.DistanceMatrixStatus.OK) {
+    //
+    //     		// 出発地点と到着地点の住所（配列）を取得
+    //     		var origins = response.originAddresses;
+    //     		var destinations = response.destinationAddresses;
+    //
+    //     		// 出発地点でループ
+    //     		for (var i=0; i<origins.length; i++) {
+    //     			// 出発地点から到着地点への計算結果を取得
+    //     			var results = response.rows[i].elements;
+    //
+    //     			// 到着地点でループ
+    //     			for (var j = 0; j<results.length; j++) {
+    //     				var from = origins[i]; // 出発地点の住所
+    //     				var to = destinations[j]; // 到着地点の住所
+    //     				var duration = results[j].duration.value; // 時間
+    //     				// var distance = results[j].distance.value; // 距離
+    //     				// console.log(duration);
+    //             hotel_durations.push(duration)
+    //
+    //     			}
+    //           console.log(hotel_durations);
+    //
+    //
+    //     		}
+    //
+    //         console.log(hotel_durations.indexOf(Math.min.apply(null,hotel_durations) ));
+    //         var nearest_hotel = hotel_durations.indexOf(Math.min.apply(null,hotel_durations) )
+    //         console.log(nearest_hotel);
+    //
+    //         hotels[nearest_hotel].day=day
+    //         console.log(hotels[nearest_hotel]);
+    //
+    //         day_planning.push(hotels[nearest_hotel])
+    //         console.log(day_planning);
+    //         daily_plans[day]=[]
+    //         daily_plans[day].push(...day_planning)
+    //         console.log(daily_plans)
+    //     	}
+    //     });
+    //       console.log(day_planning);
+    //   }
+    //   // return day_planning
+    // //
+    // // console.log(testtest);
+    //   return this.daily_plans[day]
+  },
+
+
+  clean_planning_places_hotels:function(){
+    planning_places_hotels=[]
   }
+
 }
 }
 
