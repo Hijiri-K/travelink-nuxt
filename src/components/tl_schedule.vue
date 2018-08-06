@@ -29,18 +29,10 @@ import moment from 'moment';
     data() {
       return {
         schedule: [moment().add(7, 'days'),moment().add(9, 'days')],
-        stay_nights: 0,
         clearable:false
       };
     },
     methods:{
-      show: function(){
-        var date_calcrate = this.schedule[1]-this.schedule[0]
-        var stay_nights = date_calcrate/86400000
-        console.log(stay_nights)
-        console.log(this.schedule)
-
-      }
     }
 }
 </script>
@@ -70,10 +62,4 @@ import moment from 'moment';
   height:40px;
   width:100px;
 }
-
-
-
-
-
-
 </style>

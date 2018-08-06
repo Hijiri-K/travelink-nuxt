@@ -18,7 +18,7 @@
           <el-tabs class="smartphone-view"  v-model="activeName">
             <el-tab-pane label="Itinerary" name="itinerary">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"></tl-schedule>
-              <tl-itinerary v-bind:planningPlaces="planningPlaces v-bind:stay_nights="stay_nights""></tl-itinerary>
+              <tl-itinerary v-bind:planningPlaces="planningPlaces" v-bind:planDays="planDays"></tl-itinerary>
             </el-tab-pane>
             <el-tab-pane label="Edit"  name="edit">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
@@ -36,7 +36,7 @@
 <!-- PC,iPad用 -->
       <el-row :gutter="20" class="hidden-xs-only">
         <el-col :span=12 id="itinerary-box">
-            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:stay_nights="stay_nights"></tl-itinerary>
+            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays"></tl-itinerary>
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
@@ -156,19 +156,19 @@ body{
 
 .el-input__inner{
   width:100px !important;
-  height:35px !important;
+  height:30px !important;
   vertical-align: top !important;
-  line-height: 35px !important;
+  line-height: 30px !important;
 }
 
 .el-input__prefix, .el-input__suffix, .el-input__icon{
-  height:35px !important;
-  line-height: 35px !important;
+  height:30px !important;
+  line-height: 30px !important;
 }
 
 .el-input__icon{
-  height:35px !important;
-  line-height: 35px !important;
+  height:30px !important;
+  line-height: 30px !important;
 }
 
 .smartphone-view > .el-tabs__header{
@@ -253,23 +253,32 @@ import TlItinerary from '../components/tl_itinerary.vue'
 import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
 
-
+/**
+ * 行先の選択肢の配列（BD化）
+ * @type {Array}
+ */
 var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, unique_id:null, start_time:null},
               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, unique_id:null, start_time:null},
               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, unique_id:null, start_time:null},
               { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, unique_id:null, start_time:null}
+              ]
+/*
+ * googlemapAPIで並び替えられた行先の配列
+ * @type {Array}
+ */
+var planningPlaces = [];
 
-               // { id:4,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:5,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:6,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:7,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:8,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:9,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"},
-               // { id:10,title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:"33.283696,131.475077"}
-            ]
+/**
+ * タイムラインを表示するための総計時間の変数
+ * @type {integer}
+ */
+var totalTime = 0
 
-var planningPlaces = []
-var ordered_places=[];
+/**
+ * mapの初期設定を格納するオブジェクト
+ * @type {Object}
+ */
+var map;
 
 export default {
   components: {
@@ -287,121 +296,123 @@ export default {
             planningPlaces:planningPlaces,
             places:places,
             activeName:'itinerary',
-            ordered_places:ordered_places,
-            stay_nights:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
+            planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
             styleObject: {transform: 'translateX(0)'}
         }
     },
     methods: {
+      /**
+       * 最適ルートを算出するメソッド
+       * @param  {Array} selectedPlaces [description]
+       */
       parentsMethod: function(selectedPlaces) {
-        planningPlaces.length = 0
-        planningPlaces.push(...selectedPlaces)
-        console.log(planningPlaces)
+        planningPlaces.length = 0 //選択地点のリセット
 
-        this.percentage=0;
-        var totalTime = 0;
-        for(var place of planningPlaces){
-         var staying = place['staying']+place['distance']
-          totalTime += staying
-          this.percentage = Math.round(totalTime/480*100)
-          // console.log(totalTime)
-        }
-         console.log(this.percentage)
-         this.$refs.map.initMap()
+        //googlemapAPIの読み込み
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
 
-         var directionsService = new google.maps.DirectionsService;
-         var directionsDisplay = new google.maps.DirectionsRenderer;
-         var before_spots =[];
-         var place_ids=[];
-         var response_place_ids=[];
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 33.233358, lng: 131.606644}
+        });
 
+       /**
+        * waypoints(中継地点)のlocations(緯度経度)の配列
+        * @type {Array}
+        */
+        var selectedPlacesLocations = [];
 
+       /**
+        *  waypoints(中継地点)のplace_idの配列
+        * @type {Array}
+        */
+        var selectedPlacesPlace_ids = [];
 
-         for (var planningPlace of this.planningPlaces){
-             before_spots.push({
-             location: planningPlace.location,
-             stopover: true
-             })}
+        // waypoints(中継地点)のlocations(緯度経度)の配列を作成
+        for (var selectedPlace of selectedPlaces){
+          selectedPlacesLocations.push({
+          location: selectedPlace.location,
+          stopover: true
+        })}
 
-         for (var test of planningPlaces){//place_idだけの配列を作成
-             place_ids.push(test.place_id)}
-         // console.log(place_ids)
+         //place_idだけの配列を作成
+        for (var selectedPlace of selectedPlaces){
+          selectedPlacesPlace_ids.push(selectedPlace.place_id)};
 
+        //googlemapAPIで最適ルートの算出
+        if (selectedPlacesLocations.length != 0) {
+          var origin = selectedPlacesLocations[0].location;
+          // var destination = selectedPlacesLocations[0].location;//最初に選択した場所に帰ってくるルート
+          var destination = selectedPlacesLocations[selectedPlacesLocations.length - 1].location;//最後に選択した場所に帰ってくるルート
+          directionsService.route({
+            origin:origin,
+            destination:destination,
+            travelMode: 'DRIVING',
+            // waypoints: selectedPlacesLocations.slice(1),//最初に選択した場所に帰ってくるルート
+            waypoints: selectedPlacesLocations.slice(1, selectedPlacesLocations.length - 1),//最後に選択した場所に帰ってくるルート
+            optimizeWaypoints: true
+          },
 
-         if(before_spots.length!=0){
-         var origin = before_spots[0].location;
-         // var destination = before_spots[0].location;//最初に選択した場所に帰ってくるルート
-         var destination = before_spots[before_spots.length-1].location;//最後に選択した場所に帰ってくるルート
-         directionsService.route({
-           origin:origin,
-           destination:destination,
-           travelMode: 'DRIVING',
-           // waypoints: before_spots.slice(1),//最初に選択した場所に帰ってくるルート
-           waypoints: before_spots.slice(1,before_spots.length-1),//最後に選択した場所に帰ってくるルート
-           optimizeWaypoints: true
-         }, function(response, status) {
-           if (status === 'OK') {
-             directionsDisplay.setDirections(response);
-             console.log(response)
+          function(response, status) {
+            if (status === 'OK') {
+              directionsDisplay.setDirections(response);
+              directionsDisplay.setMap(map);
+              console.log(response);
 
-             for (var response_place_id of response.geocoded_waypoints){//responseのplace_idのみの配列を作る
-                 response_place_ids.push(response_place_id.place_id)}
-             // console.log(response_place_ids)
+              //for文の制御用変数
+              var i = 0;
+              var a = response.geocoded_waypoints.length - 1;
+              var total_duration = 0;
 
+              //responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
+              for (var place_id of response.geocoded_waypoints) {
+                var place_idIndex = selectedPlacesPlace_ids.indexOf(place_id.place_id)
+                selectedPlaces[place_idIndex].distance = 0;
 
-             ordered_places.length =0;
-             var i = 0;
-             var a =  response_place_ids.length-1
-             var total_duration = 0;
-             // console.log(a)
-             for(var place_id of response_place_ids){//responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
-               var place_id_index = place_ids.indexOf(place_id)
-               planningPlaces[place_id_index].distance=0;
+                if (place_idIndex != -1) {
 
-               if(place_id_index != -1){
-                 if(a!=0){
-                   planningPlaces[place_id_index].distance=0;
-                   planningPlaces[place_id_index].distance= Math.ceil(response.routes[0].legs[i].duration.value/60)+1;
-                   console.log("ok")
-                   a=a-1;
-                 }
+                  if (a != 0) { //執着地点には移動時間がないため排除
+                    selectedPlaces[place_idIndex].distance = Math.ceil(response.routes[0].legs[i].duration.value / 60);
+                    a -= 1;
+                  }
 
-                  total_duration = total_duration + planningPlaces[place_id_index].staying + planningPlaces[place_id_index].distance
-                  planningPlaces[place_id_index].start_time = total_duration
+                total_duration = total_duration + selectedPlaces[place_idIndex].staying + selectedPlaces[place_idIndex].distance;
+                selectedPlaces[place_idIndex].start_time = total_duration;
+                planningPlaces.push(selectedPlaces[place_idIndex]);
 
-                   ordered_places.push(planningPlaces[place_id_index])
-                   console.log(total_duration)
-                   i=i+1;
+                i += 1;
+                }
+              }
+            console.log(planningPlaces);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
 
-                 }
+      this.percentage = 0; //時間の割合をリセット
+      totalTime = 0; //合計時間をリセット
 
-               }
-             // ordered_places[0].distance=0;
-             planningPlaces.length = 0
-             planningPlaces.push(...ordered_places)
-
-             console.log(planningPlaces)
-           } else {
-             window.alert('Directions request failed due to ' + status);
-           }
-
-         });
-         // planningPlaces[planningPlaces.length-1].distance=0;
+      //選択された地点の合計時間の占有割合を算出
+      for (var place of selectedPlaces) {
+        var staying = place['staying'] + place['distance'];
+        totalTime += staying;
+        this.percentage = Math.round(totalTime / 480 * 100);
       }
     },
+
     parentsMethod2: function(schedule){
-      this.stay_nights=[];
-      var date_calcrate = schedule[1]-schedule[0]
-      var stay_nights = date_calcrate/86400000+1
-      // console.log(stay_nights)
+      this.planDays = [];
+      var date_calculate = schedule[1] - schedule[0];
+      var planDays = date_calculate / 86400000 + 1;
 
-      for(var i=1;i<=stay_nights;i++){
-        this.stay_nights.push({'id':i, 'day':i})
-        this.stay_nights.sort()
+      for(var i = 1; i <= planDays; i++){
+        this.planDays.push({'id':i, 'day':i});
+        this.planDays.sort();
       }
 
-      console.log(this.stay_nights)
-      }
+      console.log(this.planDays);
     }
+  }
 }
 </script>

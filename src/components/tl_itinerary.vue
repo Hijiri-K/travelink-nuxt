@@ -2,7 +2,7 @@
 
   <el-tabs type="card">
     <!-- <div class=""> -->
-     <el-tab-pane  v-for="day in stay_nights"
+     <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
                     :label='"Day "+day.id'>
        <div class="itinerary-wrapper-wrapper">
@@ -115,7 +115,7 @@ var plan_start_time_show = plan_start_time.format("H:mm")
 var end_time = moment(initial_time).format("H:mm");
 
 export default {
-  props: ['planningPlaces','stay_nights'],
+  props: ['planningPlaces', 'planDays'],
   data() {
     return {
         start_time_show:plan_start_time_show,
@@ -131,12 +131,12 @@ export default {
   },
   methods:{
     timeSchedule: function (start_time, distance) {
-      if(start_time!=null&&distance!=null){//このメゾットでは上手くいかないので、googleAPIの中身から、時間を取り出す作戦に変更する。
+      if(start_time != null && distance != null){//このメゾットでは上手くいかないので、googleAPIの中身から、時間を取り出す作戦に変更する。
       var base_time = moment(initial_time)
-      var result = base_time.add(start_time-distance,'minutes').format("H:mm")
-      console.log(result)
-      end_time=result
-      console.log(end_time)
+      var result = base_time.add(start_time-distance, 'minutes').format("H:mm")
+      // console.log(result)
+      end_time = result
+      // console.log(end_time)
       return result
     }else{
       return end_time
@@ -145,13 +145,13 @@ export default {
   },
   timeFormat: function(data){
     var base_time = moment(initial_time)
-    var result = base_time.add(data,'minutes').format("H:mm")
+    var result = base_time.add(data, 'minutes').format("H:mm")
 
     return result
   },
   set_start_time: function(){
     console.log(this.start_time)
-    var test = moment(this.start_time,"H: mm")
+    var test = moment(this.start_time, "H: mm")
     initial_time = test
     this.start_time_show = test.format("H:mm")
   }
@@ -187,15 +187,15 @@ export default {
  }
 
 .duration-card-start{
-  margin-bottom: 8px;
+  margin-bottom:8px;
   width:calc(100%-50px);
-  height:45px;
-  line-height: 40px;
-  padding:2.5px;
+  height:38px;
+  line-height:32px;
+  padding:3px;
 }
 
 .duration-card-time-line{
-  height:25px !important;
+  height:30px !important;
 }
 
  .el-card__body{
