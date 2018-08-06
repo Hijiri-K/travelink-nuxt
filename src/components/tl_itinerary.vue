@@ -32,40 +32,42 @@
 
          <transition-group tag="div" name="itinerary-transition">
            <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces" v-bind:key="place.id">
-             <div class="time-line-wrapper inline-block">
-               <div class="time-line__line-wrapper inline-block">
-                 <div class="time-line__line">
-                     <span class="time-line__line__bot"></span>
+             <div class="" v-if="place.place_id != null">
+               <div class="time-line-wrapper inline-block" >
+                 <div class="time-line__line-wrapper inline-block">
+                   <div class="time-line__line">
+                       <span class="time-line__line__bot"></span>
+                   </div>
+                 </div><!--
+              --><div class="time-line__time inline-block">
+                   <p>{{timeSchedule(place.start_time, place.distance)}}</p>
                  </div>
                </div><!--
-            --><div class="time-line__time inline-block">
-                 <p>{{timeSchedule(place.start_time, place.distance)}}</p>
-               </div>
-             </div><!--
-          --><div class="itinerary-item-wrapper  inline-block">
-               <el-card :body-style="{ padding: '0px' }" class="itinerary-item"><!--
-                  --><div class="itinerary-item__image inline-block">
-                       <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
-                     </div><!--
-                  --><div class="itinerary-item__contents inline-block">
-                       <section class="itinerary-item__contents__section">
-                         <h3>{{place.title}}</h3>
-                         <div class="itinerary-item__contents__section__category">
-                           <p>種類：{{place.group}}　滞在時間：{{place.staying}} min</p>
-                         </div>
-                         <div class="itinerary-item__contents__section__stay">
-                         </div>
-                         <div class="itinerary-item__contents__section__discription">
-                           <p>{{place.discription}}</p>
-                         </div>
-                         <div class="itinerary-item__contents__section__price">
-                           <p>{{place.currency}}{{place.price}}</p>
-                         </div>
-                       </section>
-                     </div>
-               </el-card>
-             </div><!--
-           --><div class="" v-if="place.distance!=0">
+            --><div class="itinerary-item-wrapper  inline-block">
+                 <el-card :body-style="{ padding: '0px' }" class="itinerary-item"><!--
+                    --><div class="itinerary-item__image inline-block">
+                         <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+                       </div><!--
+                    --><div class="itinerary-item__contents inline-block">
+                         <section class="itinerary-item__contents__section">
+                           <h3>{{place.title}}</h3>
+                           <div class="itinerary-item__contents__section__category">
+                             <p>種類：{{place.group}}　滞在時間：{{place.staying}} min</p>
+                           </div>
+                           <div class="itinerary-item__contents__section__stay">
+                           </div>
+                           <div class="itinerary-item__contents__section__discription">
+                             <p>{{place.discription}}</p>
+                           </div>
+                           <div class="itinerary-item__contents__section__price">
+                             <p>{{place.currency}}{{place.price}}</p>
+                           </div>
+                         </section>
+                       </div>
+                 </el-card>
+               </div><!--
+          --></div><!--
+           --><div class="" v-if="place.duration != null">
                <div class="time-line-wrapper inline-block duration-card-time-line">
                  <div class="time-line__line-wrapper inline-block duration-card-time-line">
                    <div class="time-line__line">
@@ -76,10 +78,9 @@
                       <p>{{timeFormat(place.start_time)}}</p>
                     </div>
                </div><!--
-            --><el-card :body-style="{ padding: '0px'}" class="duration-card inline-block"  >
-                 <p>移動時間：{{place.distance}}min</p>
+            --><el-card :body-style="{ padding: '0px'}" class="duration-card inline-block">
+                 <p>移動時間：{{place.duration}}min</p>
                </el-card>
-
              </div>
            </div>
          </transition-group>

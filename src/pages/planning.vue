@@ -36,7 +36,7 @@
 <!-- PC,iPad用 -->
       <el-row :gutter="20" class="hidden-xs-only">
         <el-col :span=12 id="itinerary-box">
-            <tl-itinerary v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays"></tl-itinerary>
+            <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays"></tl-itinerary>
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
@@ -257,10 +257,10 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
  * 行先の選択肢の配列（BD化）
  * @type {Array}
  */
-var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, distance:0, unique_id:null, start_time:null},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, distance:0, unique_id:null, start_time:null},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, distance:0, unique_id:null, start_time:null},
-              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, distance:0, unique_id:null, start_time:null}
+var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, start_time:null},
+              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, start_time:null},
+              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, start_time:null},
+              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, start_time:null}
               ]
 /*
  * googlemapAPIで並び替えられた行先の配列
@@ -363,22 +363,31 @@ export default {
               var i = 0;
               var a = response.geocoded_waypoints.length - 1;
               var total_duration = 0;
+              var durationBetweenPlaces;
 
               //responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
               for (var place_id of response.geocoded_waypoints) {
                 var place_idIndex = selectedPlacesPlace_ids.indexOf(place_id.place_id)
                 selectedPlaces[place_idIndex].distance = 0;
+                durationBetweenPlaces = 0;
 
                 if (place_idIndex != -1) {
 
                   if (a != 0) { //執着地点には移動時間がないため排除
-                    selectedPlaces[place_idIndex].distance = Math.ceil(response.routes[0].legs[i].duration.value / 60);
+                    durationBetweenPlaces = Math.ceil(response.routes[0].legs[i].duration.value / 60);
+                    selectedPlaces[place_idIndex].distance = durationBetweenPlaces;
                     a -= 1;
                   }
-
-                total_duration = total_duration + selectedPlaces[place_idIndex].staying + selectedPlaces[place_idIndex].distance;
+                console.log(durationBetweenPlaces);
+                var durationId = i + 10;
+                total_duration = total_duration + selectedPlaces[place_idIndex].staying + durationBetweenPlaces;
+                console.log(selectedPlaces[place_idIndex].start_time);
                 selectedPlaces[place_idIndex].start_time = total_duration;
                 planningPlaces.push(selectedPlaces[place_idIndex]);
+
+                if (durationBetweenPlaces != 0) {
+                  planningPlaces.push({id: durationId, duration: durationBetweenPlaces})
+                }
 
                 i += 1;
                 }
