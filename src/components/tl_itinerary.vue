@@ -7,7 +7,7 @@
        <div class="itinerary-wrapper-wrapper">
          <div class="" >
          <div class="time-line-wrapper top inline-block">
-           <div class="" v-if="planningPlaces.length != 0">
+           <div class="" v-if="planningPlaces[day.id -1] != undefined">
              <div class="time-line__line-wrapper top inline-block">
                <div class="time-line__line bar-top">
                </div>
@@ -32,7 +32,7 @@
        </div>
 
          <transition-group tag="div" name="itinerary-transition">
-           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces" v-bind:key="place.id">
+           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id">
              <div class="" v-if="place.place_id != null">
                <div class="time-line-wrapper inline-block" >
                  <div class="time-line__line-wrapper inline-block">
@@ -91,17 +91,17 @@
          </transition-group>
          <div class="">
            <div class="time-line-wrapper top inline-block" >
-             <div class="" v-if="planningPlaces.length != 0">
+             <div class="" v-if="planningPlaces[day.id -1] != undefined">
                <div class="time-line__line-wrapper top inline-block">
                    <span class="time-line__line__dot bar-bottom__dot"></span>
                </div><!--
             --><div class="time-line__time bottom inline-block">
-                 <p>{{calcPlanFinishTime()}}</p>
+                 <p>{{calcPlanFinishTime(day.id)}}</p>
                </div>
              </div>
            </div>
            <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
-             <p>終了：{{calcPlanFinishTime()}}</p>
+             <p>終了：{{calcPlanFinishTime(day.id)}}</p>
            </el-card>
          </div>
        </div>
@@ -142,11 +142,13 @@ export default {
 
       return result
     },
-    calcPlanFinishTime: function() {
+    calcPlanFinishTime: function(dayId) {
       planStartTime = moment(initialTime)
-      if(this.planningPlaces.length >= 3 ){
-        var result = planStartTime.add(this.planningPlaces[this.planningPlaces.length - 2].startTime + this.planningPlaces[this.planningPlaces.length - 1].staying, 'minutes').format("H:mm")
-        return result
+      if (this.planningPlaces[dayId - 1] != undefined){
+        if(this.planningPlaces[dayId - 1].length >= 3 ){
+          var result = planStartTime.add(this.planningPlaces[dayId - 1][this.planningPlaces[dayId - 1].length - 2].startTime + this.planningPlaces[dayId - 1][this.planningPlaces[dayId - 1].length - 1].staying, 'minutes').format("H:mm")
+          return result
+        }
       }
       },
     set_start_time: function(){

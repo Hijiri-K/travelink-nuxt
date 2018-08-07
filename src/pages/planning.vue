@@ -260,7 +260,7 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}},
               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}},
               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}},
-              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685,　lng:131.369048}},
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}},
               { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}},
               ]
 /**
@@ -271,11 +271,24 @@ var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の�
               { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
               { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
               ]
-/*
+
+/**
  * googlemapAPIで並び替えられた行先の配列
  * @type {Array}
  */
 var planningPlaces = [];
+
+/**
+ * googlemapAPIで並び替えられた一日分の行先の配列
+ * @type {Array}
+ */
+var dailyPlanningPlaces = [];
+
+/**
+ * googlemapAPIで並び替えられた一日分の行先の配列
+ * @type {Array}
+ */
+var dailyLastPlaces = [];
 
 /**
  * タイムラインを表示するための総計時間の変数
@@ -316,6 +329,7 @@ export default {
        */
       parentsMethod: function(selectedPlaces) {
         planningPlaces.length = 0 //選択地点のリセット
+        dailyLastPlaces.length = 0
 
         //googlemapAPIの読み込み
         var directionsService = new google.maps.DirectionsService;
@@ -353,6 +367,8 @@ export default {
           var origin = selectedPlacesLocations[0].location;
           // var destination = selectedPlacesLocations[0].location;//最初に選択した場所に帰ってくるルート
           var destination = selectedPlacesLocations[selectedPlacesLocations.length - 1].location;//最後に選択した場所に帰ってくるルート
+
+          //ルートの検索
           directionsService.route({
             origin:origin,
             destination:destination,
@@ -371,7 +387,7 @@ export default {
               //for文の制御用変数
               var i = 0;
               var a = response.geocoded_waypoints.length - 1;
-              var total_duration = 0;
+              var totalDuration = 0;
               var durationBetweenPlaces;
 
               //responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
@@ -386,24 +402,99 @@ export default {
                     durationBetweenPlaces = Math.ceil(response.routes[0].legs[i].duration.value / 60);
                     a -= 1;
                   }
+
                 console.log(durationBetweenPlaces);
                 var durationId = i + 10;
-                total_duration = total_duration + selectedPlaces[place_idIndex].staying + durationBetweenPlaces;
-                planningPlaces.push(selectedPlaces[place_idIndex]);
+                totalDuration = totalDuration + selectedPlaces[place_idIndex].staying + durationBetweenPlaces;
+                dailyPlanningPlaces.push(selectedPlaces[place_idIndex]);
 
                 if (durationBetweenPlaces != 0) {
-                  planningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: total_duration})
+                  dailyPlanningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: totalDuration})
                 }
 
+                if(totalDuration >= 240 || i == selectedPlaces.length - 1){
+                  planningPlaces.push(dailyPlanningPlaces);
+                  if (i != selectedPlaces.length - 1 ){
+                    dailyLastPlaces.push(dailyPlanningPlaces[dailyPlanningPlaces.length - 2]);
+                  }
+                  console.log(dailyLastPlaces);
+                  dailyPlanningPlaces = [];
+                  totalDuration = 0;
+                }
                 i += 1;
                 }
               }
+
+
+
+            //最短距離のホテルの検索
+            // DistanceMatrix サービスを生成
+            var distanceMatrixService = new google.maps.DistanceMatrixService();
+
+            var dailyLastPlacesLocations = [];
+
+            var hotelsLocations = [];
+
+            for (var dailyLastPlace of dailyLastPlaces){
+              dailyLastPlacesLocations.push(dailyLastPlace.location)
+            }
+
+            for (var hotel of hotels){
+              hotelsLocations.push(hotel.location)
+            }
+
+
+
+            console.log(dailyLastPlacesLocations);
+
+            // 出発点
+            var origns = dailyLastPlacesLocations;
+            // 到着点
+            var destinations = hotelsLocations;
+
+            // DistanceMatrix の実行
+            distanceMatrixService.getDistanceMatrix({
+            	origins: origns, // 出発地点
+            	destinations: destinations, // 到着地点
+            	travelMode: google.maps.TravelMode.DRIVING, // 車モード or 徒歩モード
+            }, function(response, status) {
+            	if (status == google.maps.DistanceMatrixStatus.OK) {
+                console.log(response);
+
+            		// 出発地点と到着地点の住所（配列）を取得
+            		var origins = response.originAddresses;
+            		var destinations = response.destinationAddresses;
+
+            		// 出発地点でループ
+            		for (var i=0; i<origins.length; i++) {
+                  var lastPlaceToHotelDurations = [];
+
+            			// 出発地点から到着地点への計算結果を取得
+            			var results = response.rows[i].elements;
+
+            			// 到着地点でループ
+            			for (var j = 0; j<results.length; j++) {
+            				var from = origins[i]; // 出発地点の住所
+            				var to = destinations[j]; // 到着地点の住所
+            				var duration = Math.ceil(results[j].duration.value / 60); // 時間
+            				var distance = results[j].distance.value; // 距離
+                    lastPlaceToHotelDurations.push(duration)
+            				console.log(from,  to, duration, distance);
+
+            			}
+            		}
+                console.log(lastPlaceToHotelDurations);
+            	}
+            });
+
             console.log(planningPlaces);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
+
         });
       }
+
 
       this.percentage = 0; //時間の割合をリセット
       totalTime = 0; //合計時間をリセット
