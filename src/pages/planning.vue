@@ -269,7 +269,7 @@ var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅'
  */
 var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}},
               { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
-              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
+              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
               ]
 
 /**
@@ -474,16 +474,27 @@ export default {
 
             			// 到着地点でループ
             			for (var j = 0; j<results.length; j++) {
-            				var from = origins[i]; // 出発地点の住所
-            				var to = destinations[j]; // 到着地点の住所
+            				var from = dailyLastPlaces[i].title; // 出発地点の住所
+            				var to = hotels[j].title; // 到着地点の住所
             				var duration = Math.ceil(results[j].duration.value / 60); // 時間
             				var distance = results[j].distance.value; // 距離
                     lastPlaceToHotelDurations.push(duration)
             				console.log(from,  to, duration, distance);
-
             			}
+                  console.log(lastPlaceToHotelDurations);
+
+                  var nearestHotelIndex = lastPlaceToHotelDurations.indexOf(Math.min.apply(null,lastPlaceToHotelDurations))
+                  var nearestHotel = hotels[nearestHotelIndex];
+                  console.log(nearestHotel.title);
+
+                  var deletedDuration = planningPlaces[i].pop();
+                  console.log("hey", deletedDuration);
+                  planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
+                  planningPlaces[i].push(nearestHotel);
+                  planningPlaces[i + 1].unshift(nearestHotel);
+
             		}
-                console.log(lastPlaceToHotelDurations);
+
             	}
             });
 
