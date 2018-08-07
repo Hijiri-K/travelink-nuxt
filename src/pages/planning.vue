@@ -290,6 +290,8 @@ var dailyPlanningPlaces = [];
  */
 var dailyLastPlaces = [];
 
+var dailyFirstPlaces = [];
+
 /**
  * タイムラインを表示するための総計時間の変数
  * @type {integer}
@@ -330,6 +332,7 @@ export default {
       parentsMethod: function(selectedPlaces) {
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
+        dailyFirstPlaces.length = 0
 
         //googlemapAPIの読み込み
         var directionsService = new google.maps.DirectionsService;
@@ -414,10 +417,16 @@ export default {
 
                 if(totalDuration >= 240 || i == selectedPlaces.length - 1){
                   planningPlaces.push(dailyPlanningPlaces);
-                  if (i != selectedPlaces.length - 1 ){
+                  // if (i =! 1){ //初日の最初の場所は不要なため
+                    dailyFirstPlaces.push(dailyPlanningPlaces[0])
+                  // }
+
+                  if (i != selectedPlaces.length - 1 ){ //最終日にはホテルが不要なため（バグ対策でもある）
                     dailyLastPlaces.push(dailyPlanningPlaces[dailyPlanningPlaces.length - 2]);
                   }
                   console.log(dailyLastPlaces);
+                  console.log(dailyFirstPlaces);
+
                   dailyPlanningPlaces = [];
                   totalDuration = 0;
                 }
@@ -426,12 +435,13 @@ export default {
               }
 
 
-
             //最短距離のホテルの検索
             // DistanceMatrix サービスを生成
             var distanceMatrixService = new google.maps.DistanceMatrixService();
 
             var dailyLastPlacesLocations = [];
+
+            var dailyFirstPlacesLocations = [];
 
             var hotelsLocations = [];
 
@@ -439,13 +449,16 @@ export default {
               dailyLastPlacesLocations.push(dailyLastPlace.location)
             }
 
+            for (var dailyFirstPlace of dailyFirstPlaces){
+              dailyFirstPlacesLocations.push(dailyFirstPlace.location)
+            }
+
             for (var hotel of hotels){
               hotelsLocations.push(hotel.location)
             }
 
-
-
             console.log(dailyLastPlacesLocations);
+            console.log(dailyFirstPlacesLocations);
 
             // 出発点
             var origns = dailyLastPlacesLocations;
@@ -492,9 +505,7 @@ export default {
                   planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
                   planningPlaces[i].push(nearestHotel);
                   planningPlaces[i + 1].unshift(nearestHotel);
-
             		}
-
             	}
             });
 
@@ -505,7 +516,6 @@ export default {
 
         });
       }
-
 
       this.percentage = 0; //時間の割合をリセット
       totalTime = 0; //合計時間をリセット
