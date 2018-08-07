@@ -1,7 +1,6 @@
 <template>
 
   <el-tabs type="card">
-    <!-- <div class=""> -->
      <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
                     :label='"Day "+day.id'>
@@ -15,7 +14,7 @@
                  <span class="time-line__line__dot bar-top__dot"></span>
              </div><!--
           --><div class="time-line__time top inline-block">
-               <p>{{start_time_show}}</p>
+               <p>{{startTimeShow}}</p>
              </div>
            </div>
          </div>
@@ -38,7 +37,6 @@
                <div class="time-line-wrapper inline-block" >
                  <div class="time-line__line-wrapper inline-block">
                    <div class="time-line__line">
-                       <!-- <span class="time-line__line__dot"></span> -->
                    </div>
                  </div><!--
               --><div class="time-line__time inline-block">
@@ -98,36 +96,32 @@
                    <span class="time-line__line__dot bar-bottom__dot"></span>
                </div><!--
             --><div class="time-line__time bottom inline-block">
-                 <p>{{calcStartTime(null, null)}}</p>
+                 <p>{{calcPlanFinishTime()}}</p>
                </div>
              </div>
            </div>
            <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
-             <p>終了：{{calcStartTime(null, null)}}</p>
+             <p>終了：{{calcPlanFinishTime()}}</p>
            </el-card>
          </div>
        </div>
      </el-tab-pane>
-    <!-- </div> -->
    </el-tabs>
-
 </template>
 
 <script>
 import moment from 'moment';
 
-var initial_time = {hours: 9, minutes: 0}
-var plan_start_time = moment(initial_time);
-var plan_start_time_show = plan_start_time.format("H:mm")
-var end_time = moment(initial_time).format("H:mm");
+var initialTime = {hours: 9, minutes: 0}
+var planStartTime = moment(initialTime);
+var planStartTimeShow = planStartTime.format("H:mm")
 
 export default {
   props: ['planningPlaces', 'planDays'],
   data() {
     return {
-        start_time_show:plan_start_time_show,
-        end_time:end_time,
-        startTime: moment(initial_time).format("H:mm"),
+        startTimeShow:planStartTimeShow,
+        startTime: moment(initialTime).format("H:mm"),
         picker_options:{
           start: moment({hours: 9, minutes: 0}).format("H:mm"),
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
@@ -138,33 +132,30 @@ export default {
   },
   methods:{
     calcStartTime: function (startTime, distance) {
-      if(startTime != null && distance != null){//このメゾットでは上手くいかないので、googleAPIの中身から、時間を取り出す作戦に変更する。
-      var base_time = moment(initial_time)
-      var result = base_time.add(startTime-distance, 'minutes').format("H:mm")
-      // console.log(result)
-      end_time = result
-      // console.log(end_time)
+      planStartTime = moment(initialTime)
+      var result = planStartTime.add(startTime-distance, 'minutes').format("H:mm")
       return result
-      }else{
-        return end_time
-      }
     },
-    calcFinishTime: function(time){
-      var base_time = moment(initial_time)
-      var result = base_time.add(time, 'minutes').format("H:mm")
+    calcFinishTime: function(startTime){
+      planStartTime = moment(initialTime)
+      var result = planStartTime.add(startTime, 'minutes').format("H:mm")
 
       return result
     },
+    calcPlanFinishTime: function() {
+      planStartTime = moment(initialTime)
+      if(this.planningPlaces.length >= 3 ){
+        var result = planStartTime.add(this.planningPlaces[this.planningPlaces.length - 2].startTime + this.planningPlaces[this.planningPlaces.length - 1].staying, 'minutes').format("H:mm")
+        return result
+      }
+      },
     set_start_time: function(){
       console.log(this.startTime)
       var test = moment(this.startTime, "H: mm")
-      initial_time = test
-      this.start_time_show = test.format("H:mm")
+      initialTime = test
+      this.startTimeShow = test.format("H:mm")
     }
   },
-  // mounted:function(){
-  //   console.log(this.planningPlaces);
-  // }
 }
 
 </script>
