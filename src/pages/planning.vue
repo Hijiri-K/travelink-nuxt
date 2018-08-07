@@ -296,7 +296,8 @@ var dailyFirstPlaces = [];
  * タイムラインを表示するための総計時間の変数
  * @type {integer}
  */
-var totalTime = 0
+
+var selectedPlacesForCalcPercentage;
 
 /**
  * mapの初期設定を格納するオブジェクト
@@ -330,6 +331,7 @@ export default {
        * @param  {Array} selectedPlaces [description]
        */
       parentsMethod: function(selectedPlaces) {
+        selectedPlacesForCalcPercentage = selectedPlaces;
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
         dailyFirstPlaces.length = 0
@@ -513,16 +515,7 @@ export default {
 
         });
       }
-
-      this.percentage = 0; //時間の割合をリセット
-      totalTime = 0; //合計時間をリセット
-
-      //選択された地点の合計時間の占有割合を算出
-      for (var place of selectedPlaces) {
-        var staying = place['staying'] + place['distance'];
-        totalTime += staying;
-        this.percentage = Math.round(totalTime / 480 * 100);
-      }
+      this.calcPercentage();
     },
 
     parentsMethod2: function(schedule){
@@ -534,6 +527,20 @@ export default {
         this.planDays.push({'id':i, 'day':i});
         this.planDays.sort();
       }
+    this.calcPercentage();
+    },
+    calcPercentage: function(){
+      //選択された地点の合計時間の占有割合を算出
+      this.percentage = 0; //時間の割合をリセット
+      var totalTime = 0; //合計時間をリセット
+      for (var place of selectedPlacesForCalcPercentage) {
+        var staying = place['staying'];
+        var stayNights = this.planDays.length;
+        var maxTime = 360 * stayNights;
+        totalTime += staying;
+        this.percentage = Math.round(totalTime / maxTime * 100);
+      }
+
     }
   },
   mounted: function(){
