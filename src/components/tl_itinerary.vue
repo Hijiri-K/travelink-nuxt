@@ -8,18 +8,20 @@
        <div class="itinerary-wrapper-wrapper">
          <div class="" >
          <div class="time-line-wrapper top inline-block">
-           <div class="time-line__line-wrapper top inline-block">
-             <div class="time-line__line bar-top">
+           <div class="" v-if="planningPlaces.length != 0">
+             <div class="time-line__line-wrapper top inline-block">
+               <div class="time-line__line bar-top">
+               </div>
+                 <span class="time-line__line__dot bar-top__dot"></span>
+             </div><!--
+          --><div class="time-line__time top inline-block">
+               <p>{{start_time_show}}</p>
              </div>
-               <span class="time-line__line__bot bar-top__dot"></span>
-           </div><!--
-        --><div class="time-line__time top inline-block">
-             <p>{{start_time_show}}</p>
            </div>
          </div>
          <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
            <span>出発：</span> <el-time-select
-                         v-model="start_time"
+                         v-model="startTime"
                          :picker-options=picker_options
                          :clearable=clearable
                          placeholder="Select time"
@@ -36,11 +38,10 @@
                <div class="time-line-wrapper inline-block" >
                  <div class="time-line__line-wrapper inline-block">
                    <div class="time-line__line">
-                       <span class="time-line__line__bot"></span>
+                       <!-- <span class="time-line__line__dot"></span> -->
                    </div>
                  </div><!--
               --><div class="time-line__time inline-block">
-                   <p>{{timeSchedule(place.start_time, place.distance)}}</p>
                  </div>
                </div><!--
             --><div class="itinerary-item-wrapper  inline-block">
@@ -71,11 +72,17 @@
                <div class="time-line-wrapper inline-block duration-card-time-line">
                  <div class="time-line__line-wrapper inline-block duration-card-time-line">
                    <div class="time-line__line">
-                     <span class="time-line__line__bot"></span>
+                     <span class="time-line__line__dot dot-start"></span>
+                     <span class="time-line__line__dot dot-finish"></span>
                    </div>
                  </div><!--
                  --><div class="time-line__time inline-block">
-                      <p>{{timeFormat(place.start_time)}}</p>
+                       <div class="time-line__time-start">
+                           <p>{{calcStartTime(place.startTime, place.duration)}}</p>
+                       </div>
+                       <div class="time-line__time-finish">
+                           <p>{{calcFinishTime(place.startTime)}}</p>
+                       </div>
                     </div>
                </div><!--
             --><el-card :body-style="{ padding: '0px'}" class="duration-card inline-block">
@@ -85,18 +92,18 @@
            </div>
          </transition-group>
          <div class="">
-           <div class="time-line-wrapper top inline-block">
-             <div class="time-line__line-wrapper top inline-block">
-               <div class="time-line__line bar-bottom">
+           <div class="time-line-wrapper top inline-block" >
+             <div class="" v-if="planningPlaces.length != 0">
+               <div class="time-line__line-wrapper top inline-block">
+                   <span class="time-line__line__dot bar-bottom__dot"></span>
+               </div><!--
+            --><div class="time-line__time bottom inline-block">
+                 <p>{{calcStartTime(null, null)}}</p>
                </div>
-                 <span class="time-line__line__bot bar-bottom__dot"></span>
-             </div><!--
-          --><div class="time-line__time top inline-block">
-               <p>{{timeSchedule(null, null)}}</p>
              </div>
            </div>
            <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
-             <p>終了：{{timeSchedule(null, null)}}</p>
+             <p>終了：{{calcStartTime(null, null)}}</p>
            </el-card>
          </div>
        </div>
@@ -108,7 +115,6 @@
 
 <script>
 import moment from 'moment';
-import _ from  'lodash'
 
 var initial_time = {hours: 9, minutes: 0}
 var plan_start_time = moment(initial_time);
@@ -121,7 +127,7 @@ export default {
     return {
         start_time_show:plan_start_time_show,
         end_time:end_time,
-        start_time: moment(initial_time).format("H:mm"),
+        startTime: moment(initial_time).format("H:mm"),
         picker_options:{
           start: moment({hours: 9, minutes: 0}).format("H:mm"),
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
@@ -131,32 +137,34 @@ export default {
     };
   },
   methods:{
-    timeSchedule: function (start_time, distance) {
-      if(start_time != null && distance != null){//このメゾットでは上手くいかないので、googleAPIの中身から、時間を取り出す作戦に変更する。
+    calcStartTime: function (startTime, distance) {
+      if(startTime != null && distance != null){//このメゾットでは上手くいかないので、googleAPIの中身から、時間を取り出す作戦に変更する。
       var base_time = moment(initial_time)
-      var result = base_time.add(start_time-distance, 'minutes').format("H:mm")
+      var result = base_time.add(startTime-distance, 'minutes').format("H:mm")
       // console.log(result)
       end_time = result
       // console.log(end_time)
       return result
-    }else{
-      return end_time
+      }else{
+        return end_time
+      }
+    },
+    calcFinishTime: function(time){
+      var base_time = moment(initial_time)
+      var result = base_time.add(time, 'minutes').format("H:mm")
+
+      return result
+    },
+    set_start_time: function(){
+      console.log(this.startTime)
+      var test = moment(this.startTime, "H: mm")
+      initial_time = test
+      this.start_time_show = test.format("H:mm")
     }
-
   },
-  timeFormat: function(data){
-    var base_time = moment(initial_time)
-    var result = base_time.add(data, 'minutes').format("H:mm")
-
-    return result
-  },
-  set_start_time: function(){
-    console.log(this.start_time)
-    var test = moment(this.start_time, "H: mm")
-    initial_time = test
-    this.start_time_show = test.format("H:mm")
-  }
-}
+  // mounted:function(){
+  //   console.log(this.planningPlaces);
+  // }
 }
 
 </script>
@@ -272,15 +280,29 @@ export default {
  .time-line__time p{
    font-size:12px;
    padding: 0 0 4px 2px;
- }
-
- .time-line__time p{
    position: absolute;
    bottom:-7px;
    /* width:50px; */
  }
 
- .time-line__line__bot{
+ .time-line__time-start p{
+   font-size:12px;
+   padding: 0 0 4px 2px;
+   position: absolute;
+   bottom:23px;
+   /* width:50px; */
+ }
+
+ .time-line__time-finish p{
+   font-size:12px;
+   padding: 0 0 4px 2px;
+   position: absolute;
+   bottom:-7px;
+   /* width:50px; */
+ }
+
+
+ .time-line__line__dot{
    width:8px;
    height:8px;
    border-radius: 50%;
@@ -292,13 +314,21 @@ export default {
    margin-left: 1px;
  }
 
+ .dot-start{
+   position: absolute;
+   bottom:31px;
+   left:0px;
+ }
+
+ .dot-finish{
+   position: absolute;
+   bottom:0;
+   left:0px;
+ }
+
  .time-line__line-wrapper{
    height:108px;
    width:10px;
- }
-
- .time-line__time p{
-   /* font-size: 14px; */
  }
 
  .top{
@@ -306,29 +336,33 @@ export default {
  }
 
  .top p{
-   bottom:-5px;
+   bottom:-32px;
  }
 
+ .bottom p{
+    bottom:13px;
+  }
+
  .bar-top{
-   height:45px;
+   height:12px;
    /* width:100%; */
    position: absolute;
    bottom: -35px;
  }
 
  .bar-top__dot{
-   bottom: 3px;
+   bottom: -24px;
  }
 
  .bar-bottom{
-   height:15px;
+   height:0;
    /* width:100%; */
    position: absolute;
    bottom: 5px;
  }
 
  .bar-bottom__dot{
-   bottom: 3px;
+   bottom: 20px;
  }
 
  .el-tabs__header{
