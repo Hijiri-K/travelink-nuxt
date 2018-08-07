@@ -22,7 +22,7 @@
             </el-tab-pane>
             <el-tab-pane label="Edit"  name="edit">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
-              <tl-itinerary-edit v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+              <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -40,7 +40,7 @@
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
-          <tl-itinerary-edit v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
         </el-col>
       </el-row>
 
@@ -257,11 +257,11 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
  * 観光地の選択肢の配列（BD化）
  * @type {Array}
  */
-var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}},
-              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}},
-              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}},
+var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, default: true},
+              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, default: true},
+              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, default: false},
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, default: true},
+              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
               ]
 /**
  * ホテルの選択肢の配列（BD化）
@@ -446,22 +446,26 @@ export default {
             var hotelsLocations = [];
 
             for (var dailyLastPlace of dailyLastPlaces){
-              dailyLastPlacesLocations.push(dailyLastPlace.location)
+              dailyLastPlacesLocations.push(dailyLastPlace.location);
             }
 
+            if(dailyFirstPlaces.length != 0){
+              dailyFirstPlaces.shift(); //初日の場所を削除
+            }
             for (var dailyFirstPlace of dailyFirstPlaces){
-              dailyFirstPlacesLocations.push(dailyFirstPlace.location)
+              dailyFirstPlacesLocations.push(dailyFirstPlace.location);
             }
 
             for (var hotel of hotels){
-              hotelsLocations.push(hotel.location)
+              hotelsLocations.push(hotel.location);
             }
 
             console.log(dailyLastPlacesLocations);
             console.log(dailyFirstPlacesLocations);
 
             // 出発点
-            var origns = dailyLastPlacesLocations;
+            var origns = dailyLastPlacesLocations.concat(dailyFirstPlacesLocations);
+            console.log(origns);
             // 到着点
             var destinations = hotelsLocations;
 
@@ -479,7 +483,7 @@ export default {
             		var destinations = response.destinationAddresses;
 
             		// 出発地点でループ
-            		for (var i=0; i<origins.length; i++) {
+            		for (var i=0; i<origins.length / 2; i++) {
                   var lastPlaceToHotelDurations = [];
 
             			// 出発地点から到着地点への計算結果を取得
@@ -487,12 +491,12 @@ export default {
 
             			// 到着地点でループ
             			for (var j = 0; j<results.length; j++) {
-            				var from = dailyLastPlaces[i].title; // 出発地点の住所
-            				var to = hotels[j].title; // 到着地点の住所
+            				// var from = dailyLastPlaces[i].title; // 出発地点の住所
+            				// var to = hotels[j].title; // 到着地点の住所
             				var duration = Math.ceil(results[j].duration.value / 60); // 時間
             				var distance = results[j].distance.value; // 距離
                     lastPlaceToHotelDurations.push(duration)
-            				console.log(from,  to, duration, distance);
+            				// console.log(from,  to, duration, distance);
             			}
                   console.log(lastPlaceToHotelDurations);
 
@@ -504,6 +508,12 @@ export default {
                   console.log("hey", deletedDuration);
                   planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
                   planningPlaces[i].push(nearestHotel);
+                  // if (i == 0) {
+                    // var hotelToFirstPlaceDuration =  Math.ceil(response.rows[1].elements[nearestHotelIndex].duration.value / 60)
+                  // } else {
+                    var hotelToFirstPlaceDuration =  Math.ceil(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60)
+                  // }
+                  planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration});
                   planningPlaces[i + 1].unshift(nearestHotel);
             		}
             	}
@@ -537,9 +547,11 @@ export default {
         this.planDays.push({'id':i, 'day':i});
         this.planDays.sort();
       }
-
       console.log(this.planDays);
     }
+  },
+  mounted: function(){
+    this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces)
   }
 }
 </script>
