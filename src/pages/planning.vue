@@ -285,12 +285,16 @@ var planningPlaces = [];
 var dailyPlanningPlaces = [];
 
 /**
- * googlemapAPIで並び替えられた一日分の行先の配列
+ * 各日程の最初の行先の配列
+ * @type {Array}
+ */
+var dailyFirstPlaces = [];
+
+/**
+ * 各日程の最後の行先の配列
  * @type {Array}
  */
 var dailyLastPlaces = [];
-
-var dailyFirstPlaces = [];
 
 /**
  * タイムラインを表示するための総計時間の変数
@@ -304,6 +308,8 @@ var selectedPlacesForCalcPercentage;
  * @type {Object}
  */
 var map;
+
+const DAILY_MAX_TOTAL_TIME = 240;
 
 export default {
   components: {
@@ -407,7 +413,7 @@ export default {
                     a -= 1;
                   }
 
-                var durationId = i + 10;
+                var durationId = i + 200; //IDが被らないように
                 totalDuration = totalDuration + selectedPlaces[place_idIndex].staying + durationBetweenPlaces;
                 dailyPlanningPlaces.push(selectedPlaces[place_idIndex]);
 
@@ -415,7 +421,7 @@ export default {
                   dailyPlanningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: totalDuration})
                 }
 
-                if(totalDuration >= 240 || i == selectedPlaces.length - 1){
+                if(totalDuration >= DAILY_MAX_TOTAL_TIME || i == selectedPlaces.length - 1){
                   planningPlaces.push(dailyPlanningPlaces);
                   // if (i =! 1){ //初日の最初の場所は不要なため
                     dailyFirstPlaces.push(dailyPlanningPlaces[0])
@@ -437,10 +443,22 @@ export default {
             // DistanceMatrix サービスを生成
             var distanceMatrixService = new google.maps.DistanceMatrixService();
 
-            var dailyLastPlacesLocations = [];
-
+            /**
+             * 各日程の最初の行先の緯度経度の配列
+             * @type {Array}
+             */
             var dailyFirstPlacesLocations = [];
 
+            /**
+             * 各日程の最後の行先の緯度経度の配列
+             * @type {Array}
+             */
+            var dailyLastPlacesLocations = [];
+
+            /**
+             * ホテルの緯度経度の配列
+             * @type {Array}
+             */
             var hotelsLocations = [];
 
             for (var dailyLastPlace of dailyLastPlaces){
@@ -485,26 +503,23 @@ export default {
 
             			// 到着地点でループ
             			for (var j = 0; j<results.length; j++) {
-            				// var from = dailyLastPlaces[i].title; // 出発地点の住所
-            				// var to = hotels[j].title; // 到着地点の住所
             				var duration = Math.ceil(results[j].duration.value / 60); // 時間
             				var distance = results[j].distance.value; // 距離
                     lastPlaceToHotelDurations.push(duration)
-            				// console.log(from,  to, duration, distance);
             			}
 
+                  //一番近いホテルの取得
                   var nearestHotelIndex = lastPlaceToHotelDurations.indexOf(Math.min.apply(null,lastPlaceToHotelDurations))
                   var nearestHotel = hotels[nearestHotelIndex];
 
+                  //宿泊先とそこまでの移動時間を追加
                   var deletedDuration = planningPlaces[i].pop();
                   planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
                   planningPlaces[i].push(nearestHotel);
-                  // if (i == 0) {
-                    // var hotelToFirstPlaceDuration =  Math.ceil(response.rows[1].elements[nearestHotelIndex].duration.value / 60)
-                  // } else {
-                    var hotelToFirstPlaceDuration =  Math.ceil(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60)
-                  // }
-                  planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration});
+
+                  //宿泊の次の日の予定の最初にホテルと移動時間を追加
+                  var hotelToFirstPlaceDuration =  Math.ceil(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60)
+                  planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration});//IDが被らないように100を足す
                   planningPlaces[i + 1].unshift(nearestHotel);
             		}
             	}
@@ -512,17 +527,19 @@ export default {
           } else {
             window.alert('Directions request failed due to ' + status);
           }
-
         });
       }
       this.calcPercentage();
     },
 
+    /**
+     * 旅行の日数を配列に入れるメソッド
+     * @param  {Array} schedule [description]
+     */
     parentsMethod2: function(schedule){
       this.planDays = [];
       var date_calculate = schedule[1] - schedule[0];
-      var planDays = date_calculate / 86400000 + 1;
-
+      var planDays = date_calculate / 86400000 + 1; //秒から日に変換
       for(var i = 1; i <= planDays; i++){
         this.planDays.push({'id':i, 'day':i});
         this.planDays.sort();
@@ -536,7 +553,7 @@ export default {
       for (var place of selectedPlacesForCalcPercentage) {
         var staying = place['staying'];
         var stayNights = this.planDays.length;
-        var maxTime = 360 * stayNights;
+        var maxTime = DAILY_MAX_TOTAL_TIME * stayNights;
         totalTime += staying;
         this.percentage = Math.round(totalTime / maxTime * 100);
       }

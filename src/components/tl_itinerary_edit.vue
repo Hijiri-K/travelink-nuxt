@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-checkbox-group class="itinerary-wrapper-wrapper"  v-model="selectedPlaces" fill='#00FFCC'>
+  <el-checkbox-group class="itinerary-wrapper-wrapper"  v-model="selectedPlaces">
       <div class="itinerary-wrapper" v-for="place in places">
         <div class="itinerary-item-wrapper  inline-block">
           <el-card :body-style="{ padding: '0px' }" class="itinerary-item">
@@ -108,19 +108,17 @@
 
 </style>
 
-
 <script>
   export default {
     props:['places'],
     data: function() {
       return {
-          selectedPlaces: []
-        // checked: true
+          selectedPlaces: [],
+          fill: 'fff'
       };
     },
     mounted: function(){
       console.log(this.selectedPlaces)
-      // this.$emit("childs-event", this.selectedPlaces)
     }
   };
 
