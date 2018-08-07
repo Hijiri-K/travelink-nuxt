@@ -385,7 +385,6 @@ export default {
             if (status === 'OK') {
               directionsDisplay.setDirections(response);
               directionsDisplay.setMap(map);
-              console.log(response);
 
               //for文の制御用変数
               var i = 0;
@@ -406,7 +405,6 @@ export default {
                     a -= 1;
                   }
 
-                console.log(durationBetweenPlaces);
                 var durationId = i + 10;
                 totalDuration = totalDuration + selectedPlaces[place_idIndex].staying + durationBetweenPlaces;
                 dailyPlanningPlaces.push(selectedPlaces[place_idIndex]);
@@ -424,8 +422,6 @@ export default {
                   if (i != selectedPlaces.length - 1 ){ //最終日にはホテルが不要なため（バグ対策でもある）
                     dailyLastPlaces.push(dailyPlanningPlaces[dailyPlanningPlaces.length - 2]);
                   }
-                  console.log(dailyLastPlaces);
-                  console.log(dailyFirstPlaces);
 
                   dailyPlanningPlaces = [];
                   totalDuration = 0;
@@ -460,12 +456,9 @@ export default {
               hotelsLocations.push(hotel.location);
             }
 
-            console.log(dailyLastPlacesLocations);
-            console.log(dailyFirstPlacesLocations);
-
             // 出発点
             var origns = dailyLastPlacesLocations.concat(dailyFirstPlacesLocations);
-            console.log(origns);
+
             // 到着点
             var destinations = hotelsLocations;
 
@@ -476,7 +469,6 @@ export default {
             	travelMode: google.maps.TravelMode.DRIVING, // 車モード or 徒歩モード
             }, function(response, status) {
             	if (status == google.maps.DistanceMatrixStatus.OK) {
-                console.log(response);
 
             		// 出発地点と到着地点の住所（配列）を取得
             		var origins = response.originAddresses;
@@ -498,14 +490,11 @@ export default {
                     lastPlaceToHotelDurations.push(duration)
             				// console.log(from,  to, duration, distance);
             			}
-                  console.log(lastPlaceToHotelDurations);
 
                   var nearestHotelIndex = lastPlaceToHotelDurations.indexOf(Math.min.apply(null,lastPlaceToHotelDurations))
                   var nearestHotel = hotels[nearestHotelIndex];
-                  console.log(nearestHotel.title);
 
                   var deletedDuration = planningPlaces[i].pop();
-                  console.log("hey", deletedDuration);
                   planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
                   planningPlaces[i].push(nearestHotel);
                   // if (i == 0) {
@@ -518,8 +507,6 @@ export default {
             		}
             	}
             });
-
-            console.log(planningPlaces);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
@@ -547,7 +534,6 @@ export default {
         this.planDays.push({'id':i, 'day':i});
         this.planDays.sort();
       }
-      console.log(this.planDays);
     }
   },
   mounted: function(){
