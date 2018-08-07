@@ -254,13 +254,22 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
 
 /**
- * 行先の選択肢の配列（BD化）
+ * 観光地の選択肢の配列（BD化）
  * @type {Array}
  */
 var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}},
               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}},
               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}},
-              { id:4, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}}
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685,　lng:131.369048}},
+              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}},
+              ]
+/**
+ * ホテルの選択肢の配列（BD化）
+ * @type {Array}
+ */
+var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}},
+              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
+              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:120, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
               ]
 /*
  * googlemapAPIで並び替えられた行先の配列
