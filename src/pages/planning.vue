@@ -476,7 +476,7 @@ export default {
             }
 
             // 出発点
-            var origns = dailyLastPlacesLocations.concat(dailyFirstPlacesLocations);
+            var origns = dailyLastPlacesLocations.concat(dailyFirstPlacesLocations); //最終行先の配列に最初行先の配列を追加
 
             // 到着点
             var destinations = hotelsLocations;
@@ -523,7 +523,7 @@ export default {
 
                   //最初にホテルを追加したことによるタイムラインのずれを修正
                   if (planningPlaces[i + 1].length >= 5){
-                    for (var i2 = 3; i2 <= planningPlaces[i + 1].length; i2 += 2){
+                    for (var i2 = 3; i2 < planningPlaces[i + 1].length; i2 += 2){
                     planningPlaces[i + 1][i2].startTime += hotelToFirstPlaceDuration;
                     }
                   }
