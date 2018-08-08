@@ -4,7 +4,6 @@
   <ul class="header__menu">
     <li class="header__menu">about</li>
     <li class="header__menu">mypage</li>
-    <input type="text" name="" value="">
   </ul>
 </div>
 </template>

@@ -437,7 +437,6 @@ export default {
                 }
               }
 
-
             //最短距離のホテルの検索
             // DistanceMatrix サービスを生成
             var distanceMatrixService = new google.maps.DistanceMatrixService();
