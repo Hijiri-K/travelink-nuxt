@@ -261,7 +261,7 @@ var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅'
               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, default: true},
               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, default: false},
               { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, default: true},
-              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:240, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
+              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:180, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
               ]
 /**
  * ホテルの選択肢の配列（BD化）
@@ -403,13 +403,12 @@ export default {
               //responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
               for (var place_id of response.geocoded_waypoints) {
                 var place_idIndex = selectedPlacesPlace_ids.indexOf(place_id.place_id)
-                selectedPlaces[place_idIndex].distance = 0;
                 durationBetweenPlaces = 0;
 
                 if (place_idIndex != -1) {
 
                   if (a != 0) { //執着地点には移動時間がないため排除
-                    durationBetweenPlaces = Math.ceil(response.routes[0].legs[i].duration.value / 60);
+                    durationBetweenPlaces = Math.round(response.routes[0].legs[i].duration.value / 60);
                     a -= 1;
                   }
 
@@ -503,7 +502,7 @@ export default {
 
             			// 到着地点でループ
             			for (var j = 0; j<results.length; j++) {
-            				var duration = Math.ceil(results[j].duration.value / 60); // 時間
+            				var duration = Math.round(results[j].duration.value / 60); // 時間
             				var distance = results[j].distance.value; // 距離
                     lastPlaceToHotelDurations.push(duration)
             			}
@@ -514,13 +513,20 @@ export default {
 
                   //宿泊先とそこまでの移動時間を追加
                   var deletedDuration = planningPlaces[i].pop();
-                  planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime});
+                  planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime - deletedDuration.duration + lastPlaceToHotelDurations[nearestHotelIndex]});
                   planningPlaces[i].push(nearestHotel);
 
                   //宿泊の次の日の予定の最初にホテルと移動時間を追加
-                  var hotelToFirstPlaceDuration =  Math.ceil(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60)
+                  var hotelToFirstPlaceDuration =  Math.round(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60);
                   planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration});//IDが被らないように100を足す
                   planningPlaces[i + 1].unshift(nearestHotel);
+
+                  //最初にホテルを追加したことによるタイムラインのずれを修正
+                  if (planningPlaces[i + 1].length >= 5){
+                    for (var i2 = 3; i2 <= planningPlaces[i + 1].length; i2 += 2){
+                    planningPlaces[i + 1][i2].startTime += hotelToFirstPlaceDuration;
+                    }
+                  }
             		}
             	}
             });

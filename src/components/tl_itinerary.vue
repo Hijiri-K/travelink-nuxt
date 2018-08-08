@@ -133,7 +133,7 @@ export default {
   methods:{
     calcStartTime: function (startTime, distance) {
       planStartTime = moment(initialTime)
-      var result = planStartTime.add(startTime-distance, 'minutes').format("H:mm")
+      var result = planStartTime.add(startTime - distance, 'minutes').format("H:mm")
       return result
     },
     calcFinishTime: function(startTime){
