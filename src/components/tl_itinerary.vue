@@ -23,6 +23,7 @@
                          v-model="startTime"
                          :picker-options=picker_options
                          :clearable=clearable
+                         :editable=editable
                          placeholder="Select time"
                          @change="set_start_time"
                          class="inine-block"
@@ -127,7 +128,8 @@ export default {
           step: moment({hours: 0, minutes: 30}).format("H:mm"),
           end: moment({hours: 11, minutes: 0}).format("H:mm")
         },
-        clearable:false
+        clearable:false,
+        editable:false
     };
   },
   methods:{

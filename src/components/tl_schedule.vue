@@ -8,6 +8,7 @@
             start-placeholder="Start date"
             end-placeholder="End date" class="inine-block"
             :clearable=clearable
+            :editable=editable
             @change='$emit("childs-event", schedule)'
             >
           </el-date-picker>
@@ -29,7 +30,8 @@ import moment from 'moment';
     data() {
       return {
         schedule: [moment().add(7, 'days'),moment().add(9, 'days')],
-        clearable:false
+        clearable:false,
+        editable:false
       };
     },
     methods:{
