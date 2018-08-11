@@ -1,12 +1,13 @@
 <template>
   <div>
-      <el-container>
+
         <el-header>
           <tl-header>
           </tl-header>
         </el-header>
-      </el-container>
+  <el-container>
     <nuxt/>
+  </el-container>
   </div>
 </template>
 
