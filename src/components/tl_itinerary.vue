@@ -1,9 +1,11 @@
 <template>
 
-  <el-tabs type="card">
+  <el-tabs type="card" @tab-click="tabClick">
      <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
-                    :label='"Day "+day.id'>
+                    :label='"Day "+day.id'
+                    class = "tlItinerary"
+                    >
        <div class="itinerary-wrapper-wrapper">
          <div class="" >
          <div class="time-line-wrapper top inline-block">
@@ -129,7 +131,8 @@ export default {
           end: moment({hours: 11, minutes: 0}).format("H:mm")
         },
         clearable:false,
-        editable:false
+        editable:false,
+        tabIndex:0
     };
   },
   methods:{
@@ -158,6 +161,13 @@ export default {
       var test = moment(this.startTime, "H: mm")
       initialTime = test
       this.startTimeShow = test.format("H:mm")
+    },
+
+    tabClick: function(tab){
+      this.tabIndex = tab.index;
+      console.log(this.tabIndex);
+      this.$emit('tabClick');
+
     }
   },
 }
@@ -169,7 +179,8 @@ export default {
 
 .itinerary-item-wrapper{
   padding-bottom:8px;
-  width:calc(100%-50px);
+  /* padding-right: 5px; */
+  width:calc(100%-55px);
 }
  .el-card{
    /* margin:10px; */
@@ -183,7 +194,7 @@ export default {
    padding:0;
    margin-bottom: 8px;
    height:25px;
-  width:calc(100%-50px);
+  width:calc(100%-55px);
  }
 
  .duration-card p{
@@ -192,7 +203,7 @@ export default {
 
 .duration-card-start{
   margin-bottom:8px;
-  width:calc(100%-50px);
+  width:calc(100%-55px);
   height:38px;
   line-height:32px;
   padding:3px;
@@ -265,6 +276,7 @@ export default {
    /* height:108px; */
    width:50px;
    position:relative;
+   margin-left: 5px;
  }
 
  .time-line__time{
@@ -304,7 +316,7 @@ export default {
    background-color: #6D6875;
    position: absolute;
    bottom:0;
-   left:0px;
+   left:0;
    margin-right: 1px;
    margin-left: 1px;
  }

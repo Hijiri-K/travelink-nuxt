@@ -16,11 +16,11 @@
       <el-row class="hidden-sm-and-up">
         <el-col :span=24>
           <el-tabs class="smartphone-view"  v-model="activeName">
-            <el-tab-pane label="Itinerary" name="itinerary">
+            <el-tab-pane label="Itinerary" name="itinerarySp">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"></tl-schedule>
-              <tl-itinerary v-bind:planningPlaces="planningPlaces" v-bind:planDays="planDays"></tl-itinerary>
+              <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces" v-bind:planDays="planDays" @tabClick="changeTab"></tl-itinerary>
             </el-tab-pane>
-            <el-tab-pane label="Edit"  name="edit">
+            <el-tab-pane label="Edit"  name="editSp">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
               <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
             </el-tab-pane>
@@ -36,7 +36,7 @@
 <!-- PC,iPad用 -->
       <el-row :gutter="20" class="hidden-xs-only">
         <el-col :span=12 id="itinerary-box">
-            <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays"></tl-itinerary>
+            <tl-itinerary ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab"></tl-itinerary>
         </el-col>
         <el-col :span=12 id="itinerary-edit-box">
           <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
@@ -228,6 +228,21 @@ body{
   margin-right: 10px;
 }
 
+.el-tab-pane{
+  display: block !important;
+  float:left !important;
+  width:200px;
+}
+
+.el-tabs__content{
+  width:2304px !important;
+  transition: left .3s;
+}
+
+.el-tabs{
+  overflow: hidden !important;
+}
+
 </style>
 <script>
 // import HelloTemp from '../components/hello_temp.vue'
@@ -253,6 +268,7 @@ import TlItinerary from '../components/tl_itinerary.vue'
 import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
 
+var windowWidth = 768;
 /**
  * 観光地の選択肢の配列（BD化）
  * @type {Array}
@@ -320,16 +336,17 @@ export default {
     TlItinerary,
     TlItineraryEdit
   },
-    data() {
-        return {
-            percentage: 0,
-            places:places,
-            planningPlaces:planningPlaces,
-            places:places,
-            activeName:'itinerary',
-            planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
-            styleObject: {transform: 'translateX(0)'}
-        }
+
+  data() {
+      return {
+          percentage: 0,
+          places:places,
+          planningPlaces:planningPlaces,
+          places:places,
+          activeName:'itinerary',
+          planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
+          styleObject: {transform: 'translateX(0)'}
+      }
     },
     methods: {
       /**
@@ -551,6 +568,11 @@ export default {
       }
     this.calcPercentage();
     },
+
+    /**
+     * パーセンテージの計算をおこなうメソッド
+     *
+     */
     calcPercentage: function(){
       //選択された地点の合計時間の占有割合を算出
       this.percentage = 0; //時間の割合をリセット
@@ -562,11 +584,56 @@ export default {
         totalTime += staying;
         this.percentage = Math.round(totalTime / maxTime * 100);
       }
+    },
 
+    changeTab: function(){
+      //refsが二つで共用できないため、それぞれの挙動を設定する必要がある。
+      var tabIndex = this.$refs.itinerary.tabIndex;
+      // console.log(tabIndex);
+      var elTabs = document.getElementsByClassName("el-tabs__content");
+      var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
+      var elTabsLeftPx = tabIndex * (-windowWidth  / 2 + 20 ) + "px";
+      var elTabPaneWidth = (windowWidth / 2 - 20) + "px";
+
+      console.log(elTabs);
+
+      for (var i = 0; i <= elTabPane.length-1; i++ ) {
+        elTabPane[i].style.width =  elTabPaneWidth;
+      }
+
+      // console.log(LeftPx);
+
+      elTabs[0].style.left = elTabsLeftPx
+      elTabs[1].style.left = elTabsLeftPx
+      elTabs[2].style.left = elTabsLeftPx
+    },
+
+    resizeWindow: function(){
+      windowWidth = window.innerWidth;
+      var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
+      var elTabPaneWidth = (windowWidth / 2 - 20) + "px";
+      for (var i = 0; i <= elTabPane.length-1; i++ ) {
+        elTabPane[i].style.width =  elTabPaneWidth;
+      }
     }
   },
+
   mounted: function(){
     this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces)
-  }
+    window.addEventListener('resize', this.resizeWindow)
+  },
+  beforeMount: function(){
+    windowWidth = window.innerWidth;
+    var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
+    var elTabPaneWidth = (windowWidth / 2 - 20) + "px";
+    for (var i = 0; i <= elTabPane.length-1; i++ ) {
+      elTabPane[i].style.width =  elTabPaneWidth;
+    }
+
+  },
+  beforeDestroy: function () {
+   // インスタンスを破棄する前に、イベントリスナから削除
+   // window.removeEventListener('resize', windowWidth = window.innerWidth, false);
+ }
 }
 </script>
