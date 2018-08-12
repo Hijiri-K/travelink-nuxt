@@ -157,7 +157,6 @@ export default {
       }
       },
     set_start_time: function(){
-      console.log(this.startTime)
       var test = moment(this.startTime, "H: mm")
       initialTime = test
       this.startTimeShow = test.format("H:mm")
@@ -165,7 +164,6 @@ export default {
 
     tabClick: function(tab){
       this.tabIndex = tab.index;
-      console.log(this.tabIndex);
       this.$emit('tabClick');
 
     }
