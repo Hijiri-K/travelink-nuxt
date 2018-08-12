@@ -1,5 +1,6 @@
 <template>
-
+<div class="">
+<el-button type="primary" @click="$emit('editItinerary')">Edit</el-button>
   <el-tabs type="card" @tab-click="tabClick">
      <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
@@ -110,6 +111,7 @@
        </div>
      </el-tab-pane>
    </el-tabs>
+   </div>
 </template>
 
 <script>
@@ -370,9 +372,16 @@ export default {
    bottom: 20px;
  }
 
- .el-tabs__header{
-   display:block !important;
+ .el-button {
+   position:absolute;
+   left:calc(100% - 85px);
+   height:35px;
+   width:70px;
+   line-height: 35px;
+   padding:0;
+   margin: 2.5px;
  }
+
 
 
 </style>

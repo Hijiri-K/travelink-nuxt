@@ -37,7 +37,7 @@
       <el-row :gutter="20">
         <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
         <el-col :sm=12 :xs=24 id="itinerary-box">
-            <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab"></tl-itinerary>
+            <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary"></tl-itinerary>
         </el-col>
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
           <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
@@ -245,6 +245,10 @@ body{
 
 .el-tabs{
   overflow: hidden !important;
+}
+
+.el-tabs__header {
+  width: calc(100% - 80px) !important;
 }
 
 </style>
@@ -570,6 +574,7 @@ export default {
         this.planDays.push({'id':i, 'day':i});
         this.planDays.sort();
       }
+    // this.changeTab();
     this.calcPercentage();
     },
 
@@ -591,16 +596,21 @@ export default {
     },
 
     changeTab: function(){
-
       var tabIndex = this.$refs.itinerary.tabIndex;
       var elTabs = document.getElementsByClassName("el-tabs__content");
       var widthDevide = 2;
       if (windowWidth < 768) {
         widthDevide = 1;
       }
+      var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
+      //日数で必要なwidthを計算
+      var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
+      for (var i = 0; i <= this.planDays.length - 1; i++ ) {
+        elTabPane[i].style.width =  elTabPaneWidth;
+      }
 
       var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
-      // elTabs[0].style.width =  (windowWidth / devide - 20) * this.planDays.length  + "px" ;
+      elTabs[0].style.width =  (windowWidth / widthDevide - 20) * this.planDays.length  + "px" ;
       elTabs[0].style.left = elTabsLeftPx;
 
     },
@@ -624,18 +634,19 @@ export default {
         itineraryEditBox.style.left = 0
         itineraryEditBox.style.display = "none"
       }
-
+      console.log( this.planDays.length);
       //日数で必要なwidthを計算
       var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
-      for (var i = 0; i <= elTabPane.length - 1; i++ ) {
+      for (var i = 0; i <= this.planDays.length - 1; i++ ) {
         elTabPane[i].style.width =  elTabPaneWidth;
       }
 
       var elTabs = document.getElementsByClassName("el-tabs__content");
-      // var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
-      elTabs[0].style.width =  (windowWidth / widthDevide - 20) * this.planDays.length  + "px" ;
-      // elTabs[0].style.left = elTabsLeftPx;
+      var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
+      elTabs[0].style.width =  (windowWidth / widthDevide - 10) * this.planDays.length  + "px" ;
+      elTabs[0].style.left = elTabsLeftPx;
       console.log("resized");
+
     },
     changeSpTab:function(tabName){
       var itineraryBox = document.getElementById("itinerary-box");
@@ -647,6 +658,9 @@ export default {
         itineraryBox.style.display = "none"
         itineraryEditBox.style.display = "block"
       }
+    },
+    editItinerary: function(){
+      console.log("edit");
     }
   },
 
@@ -681,6 +695,7 @@ export default {
     elTabs[0].style.width =  (windowWidth / widthDevide - 20) * this.planDays.length  + "px" ;
     // elTabs[0].style.left = elTabsLeftPx;
   },
+
   beforeMount: function(){
     console.log("boforeMount");
   },
