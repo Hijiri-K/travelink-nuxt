@@ -93,6 +93,7 @@ body{
   overflow-y: auto;
   /* top:150px; */
   height: calc(100%-250px);
+  transition: width .3s;
 }
 
 #itinerary-edit-box{
@@ -101,6 +102,7 @@ body{
   overflow-y: auto;
   /* top:150px; */
   left:50%;
+  transition: left .3s;
 }
 
 /* タブ切り替えボタン */
@@ -661,6 +663,12 @@ export default {
     },
     editItinerary: function(){
       console.log("edit");
+      var itineraryBox = document.getElementById("itinerary-box");
+      var itineraryEditBox = document.getElementById("itinerary-edit-box");
+      // itineraryBox.classList.remove("el-col-sm-12")
+      // itineraryBox.classList.add("el-col-sm-24")
+      itineraryEditBox.style.left = windowWidth + "px"
+      itineraryBox.style.width = windowWidth + "px"
     }
   },
 
