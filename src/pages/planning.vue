@@ -37,9 +37,15 @@
       <el-row :gutter="20">
         <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
         <el-col :sm=12 :xs=24 id="itinerary-box">
-            <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary"></tl-itinerary>
+          <div id="itinerary-btns-wrapper">
+            <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='parentsMethod' border>Optimize</el-checkbox>
+            <span id="edit-itinerary-btn" @click='editItinerary'>Edit</span>
+          </div>
+
+          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary"></tl-itinerary>
         </el-col>
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
+
           <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
         </el-col>
         <div id="switch-buttons" class="hidden-sm-and-up">
@@ -99,8 +105,7 @@ body{
 #itinerary-edit-box{
   position: fixed;
   height: calc(100%-250px);
-  overflow-y: auto;
-  /* top:150px; */
+  overflow-y:auto;
   left:50%;
   transition: left .3s;
 }
@@ -138,7 +143,7 @@ body{
 }
 
 /* Elementのコンポーネントのレイアウト調整 */
-.el-checkbox__label{
+.itinerary-edit-checkbox > .el-checkbox__label{
   display: none !important;
 }
 
@@ -243,16 +248,62 @@ body{
 
 .el-tabs__content{
   transition: left .3s;
+  /* position: relative; */
+  /* top:60px; */
+  margin-top:60px;
 }
 
 .el-tabs{
-  overflow: hidden !important;
+  overflow-x:hidden !important;
+  top:100px;
 }
 
 .el-tabs__header {
-  width: calc(100% - 80px) !important;
+  width: calc(50% - 170px) !important;
+  position: fixed;
+  z-index: 10;
+  background-color: #fff;
 }
 
+#itinerary-btns-wrapper{
+  position:fixed;
+  left:calc(50% - 170px);
+  display: inline-block;
+  height: 41px;
+  width:195px;
+  margin-left: 5px;
+  background-color: white;
+  z-index: 12;
+  transition: left .3s;
+}
+
+#edit-itinerary-btn {
+  display: inline-block;
+  height:34.5px;
+  width:50px;
+  line-height: 31px;
+  padding:0;
+  margin: 2.5px;
+  color: #fff;
+  font-weight: 450;
+  background-color: #409eff;
+  border: 1px solid #409eff;
+  box-sizing: border-box;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color .3s;
+}
+
+#optimize-itinerary{
+  padding:3px 5px 3px 5px;
+  height:35px;
+  margin: 2.5px;
+  margin-left: 7px;
+  line-height: 26px;
+}
+.el-checkbox__label{
+  padding-left:4px;
+}
 </style>
 <script>
 // import HelloTemp from '../components/hello_temp.vue'
@@ -322,12 +373,12 @@ var dailyFirstPlaces = [];
  */
 var dailyLastPlaces = [];
 
-/**
- * タイムラインを表示するための総計時間の変数
- * @type {integer}
- */
 
-var selectedPlacesForCalcPercentage;
+/**
+ * 引数が無しの場合用の選択行先配列
+ * @type {Array}
+ */
+var altSelectedPlaces = [];
 
 /**
  * mapの初期設定を格納するオブジェクト
@@ -356,7 +407,8 @@ export default {
           activeName:'itinerary',
           planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
           styleObject: {transform: 'translateX(0)'},
-          editItineraryBtn:false
+          editItineraryBtn:false,
+          optimizeItinerary:true
       }
     },
     methods: {
@@ -365,7 +417,21 @@ export default {
        * @param  {Array} selectedPlaces [description]
        */
       parentsMethod: function(selectedPlaces) {
-        selectedPlacesForCalcPercentage = selectedPlaces;
+        //引き数によって処理の内容を変更
+        //・optimizeボタンからfalse->スキップ
+        //・optimizeボタンからtrue->altSelectedPlacesを使って計算
+        //・itineraryEditから配列->引数を使って計算
+        if (typeof selectedPlaces == "boolean" && selectedPlaces == false) {
+          console.log('Calculating : false');
+        } else {
+          console.log('Calculating : true');
+          if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
+            selectedPlaces = altSelectedPlaces;
+          } else {
+            altSelectedPlaces = selectedPlaces;
+          }
+
+        console.log("Optimized : " + this.optimizeItinerary)
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
         dailyFirstPlaces.length = 0
@@ -414,7 +480,7 @@ export default {
             travelMode: 'DRIVING',
             // waypoints: selectedPlacesLocations.slice(1),//最初に選択した場所に帰ってくるルート
             waypoints: selectedPlacesLocations.slice(1, selectedPlacesLocations.length - 1),//最後に選択した場所に帰ってくるルート
-            optimizeWaypoints: true
+            optimizeWaypoints: this.optimizeItinerary
           },
 
           function(response, status) {
@@ -563,6 +629,7 @@ export default {
         });
       }
       this.calcPercentage();
+      }
     },
 
     /**
@@ -589,7 +656,7 @@ export default {
       //選択された地点の合計時間の占有割合を算出
       this.percentage = 0; //時間の割合をリセット
       var totalTime = 0; //合計時間をリセット
-      for (var place of selectedPlacesForCalcPercentage) {
+      for (var place of altSelectedPlaces) {
         var staying = place['staying'];
         var stayNights = this.planDays.length;
         var maxTime = DAILY_MAX_TOTAL_TIME * stayNights;
@@ -665,22 +732,26 @@ export default {
     editItinerary: function(){
       var itineraryBox = document.getElementById("itinerary-box");
       var itineraryEditBox = document.getElementById("itinerary-edit-box");
-      var EditItineraryBtn = document.getElementById("edit-itinerary-btn");
+      var editItineraryBtn = document.getElementById("edit-itinerary-btn");
+      var itineraryBtnsWrapper= document.getElementById("itinerary-btns-wrapper");
       if (this.editItineraryBtn == false) {
         console.log("edit");
-        itineraryEditBox.style.left = windowWidth + "px"
-        itineraryBox.style.width = windowWidth + "px"
-        EditItineraryBtn.style.backgroundColor =  "#f56c6c";
-        EditItineraryBtn.style.border =  "solid 1px #f56c6c";
-        EditItineraryBtn.textContent = "close";
+        itineraryEditBox.style.left = "100%"
+        itineraryBox.style.width = "100%"
+        itineraryBtnsWrapper.style.left = itineraryBtnsWrapper.style.left = "calc(100% - 170px)";
+        editItineraryBtn.style.backgroundColor =  "#f56c6c";
+        editItineraryBtn.style.border =  "solid 1px #f56c6c";
+        editItineraryBtn.textContent = "close";
         this.editItineraryBtn = true;
+        this.optimizeItinerary = false;
       } else {
         console.log("close");
-        itineraryEditBox.style.left = windowWidth / 2 + "px"
-        itineraryBox.style.width = windowWidth / 2 + "px"
-        EditItineraryBtn.style.backgroundColor =  "#409eff";
-        EditItineraryBtn.style.border =  "solid 1px #409eff";
-        EditItineraryBtn.textContent = "edit";
+        itineraryEditBox.style.left = "50%"
+        itineraryBox.style.width = "50%"
+        itineraryBtnsWrapper.style.left = "calc(50% - 170px)";
+        editItineraryBtn.style.backgroundColor =  "#409eff";
+        editItineraryBtn.style.border =  "solid 1px #409eff";
+        editItineraryBtn.textContent = "edit";
         this.editItineraryBtn = false;
       }
     }
