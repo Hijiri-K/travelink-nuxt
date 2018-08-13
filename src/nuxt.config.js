@@ -17,7 +17,9 @@ module.exports = {
     script: [
       { src: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAyhGYfqVCJlu4nw3oBC8BQgHgUdpKyoLs' },
       { src: "https://togetherjs.com/togetherjs-min.js"},
-      {src: "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"}
+      { src: "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"},
+      { src: "https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"},
+      { src: "https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.16.0/vuedraggable.min.js"}
     ]
   },
   /*
