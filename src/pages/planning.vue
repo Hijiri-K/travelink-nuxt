@@ -355,7 +355,8 @@ export default {
           places:places,
           activeName:'itinerary',
           planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
-          styleObject: {transform: 'translateX(0)'}
+          styleObject: {transform: 'translateX(0)'},
+          editItineraryBtn:false
       }
     },
     methods: {
@@ -662,13 +663,26 @@ export default {
       }
     },
     editItinerary: function(){
-      console.log("edit");
       var itineraryBox = document.getElementById("itinerary-box");
       var itineraryEditBox = document.getElementById("itinerary-edit-box");
-      // itineraryBox.classList.remove("el-col-sm-12")
-      // itineraryBox.classList.add("el-col-sm-24")
-      itineraryEditBox.style.left = windowWidth + "px"
-      itineraryBox.style.width = windowWidth + "px"
+      var EditItineraryBtn = document.getElementById("edit-itinerary-btn");
+      if (this.editItineraryBtn == false) {
+        console.log("edit");
+        itineraryEditBox.style.left = windowWidth + "px"
+        itineraryBox.style.width = windowWidth + "px"
+        EditItineraryBtn.style.backgroundColor =  "#f56c6c";
+        EditItineraryBtn.style.border =  "solid 1px #f56c6c";
+        EditItineraryBtn.textContent = "close";
+        this.editItineraryBtn = true;
+      } else {
+        console.log("close");
+        itineraryEditBox.style.left = windowWidth / 2 + "px"
+        itineraryBox.style.width = windowWidth / 2 + "px"
+        EditItineraryBtn.style.backgroundColor =  "#409eff";
+        EditItineraryBtn.style.border =  "solid 1px #409eff";
+        EditItineraryBtn.textContent = "edit";
+        this.editItineraryBtn = false;
+      }
     }
   },
 

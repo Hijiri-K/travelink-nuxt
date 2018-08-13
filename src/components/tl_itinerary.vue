@@ -1,6 +1,6 @@
 <template>
 <div class="">
-<el-button type="primary" @click="$emit('editItinerary')">Edit</el-button>
+<span id="edit-itinerary-btn" @click="$emit('editItinerary')">Edit</span>
   <el-tabs type="card" @tab-click="tabClick">
      <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
@@ -372,14 +372,22 @@ export default {
    bottom: 20px;
  }
 
- .el-button {
+ #edit-itinerary-btn {
    position:absolute;
    left:calc(100% - 85px);
    height:35px;
    width:70px;
-   line-height: 35px;
+   line-height: 31px;
    padding:0;
    margin: 2.5px;
+   color: #fff;
+   font-weight: 450;
+   background-color: #409eff;
+   border: 1px solid #409eff;
+   border-radius: 4px;
+   text-align: center;
+   transition: background-color .3s;
+
  }
 
 
