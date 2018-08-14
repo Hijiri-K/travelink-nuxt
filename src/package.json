@@ -17,7 +17,8 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.2",
     "moment": "^2.22.2",
-    "nuxt": "^1.0.0"
+    "nuxt": "^1.0.0",
+    "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
     "@nuxtjs/pwa": "^2.0.8",

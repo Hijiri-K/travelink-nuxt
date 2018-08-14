@@ -744,6 +744,8 @@ export default {
         editItineraryBtn.textContent = "close";
         this.editItineraryBtn = true;
         this.optimizeItinerary = false;
+        this.$refs.itinerary.draggableOptions.disabled = false;
+        this.$refs.itinerary.disableTrandition = true;
       } else {
         console.log("close");
         itineraryEditBox.style.left = "50%"
@@ -753,6 +755,9 @@ export default {
         editItineraryBtn.style.border =  "solid 1px #409eff";
         editItineraryBtn.textContent = "edit";
         this.editItineraryBtn = false;
+        this.$refs.itinerary.draggableOptions.disabled = true;
+        this.$refs.itinerary.disableTrandition = false;
+
       }
     }
   },

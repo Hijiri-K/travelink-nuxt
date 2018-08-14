@@ -33,9 +33,9 @@
                      </el-time-select>
          </el-card>
        </div>
-
+       <draggable :list="planningPlacesDraggable[day.id-1]" @start="deleteDurationBeforeDragging" @end="calcurateRouteAfterDragging" :options='draggableOptions'>
          <transition-group tag="div" name="itinerary-transition">
-           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id">
+           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id"  :class="{ 'disable-transition' : disableTrandition }">
              <div class="" v-if="place.place_id != null">
                <div class="time-line-wrapper inline-block" >
                  <div class="time-line__line-wrapper inline-block">
@@ -69,7 +69,8 @@
                  </el-card>
                </div><!--
           --></div><!--
-           --><div class="" v-if="place.duration != null">
+          --><div v-if="place.duration != null">
+             <div class="duration-cards">
                <div class="time-line-wrapper inline-block duration-card-time-line">
                  <div class="time-line__line-wrapper inline-block duration-card-time-line">
                    <div class="time-line__line">
@@ -90,8 +91,10 @@
                  <p>移動時間：{{place.duration}}min</p>
                </el-card>
              </div>
+             </div>
            </div>
          </transition-group>
+       </draggable>
          <div class="">
            <div class="time-line-wrapper top inline-block" >
              <div class="" v-if="planningPlaces[day.id -1] != undefined">
@@ -115,12 +118,16 @@
 
 <script>
 import moment from 'moment';
+import draggable from 'vuedraggable';
 
 var initialTime = {hours: 9, minutes: 0}
 var planStartTime = moment(initialTime);
 var planStartTimeShow = planStartTime.format("H:mm")
 
 export default {
+  components:{
+    draggable
+  },
   props: ['planningPlaces', 'planDays'],
   data() {
     return {
@@ -133,7 +140,10 @@ export default {
         },
         clearable:false,
         editable:false,
-        tabIndex:0
+        tabIndex:0,
+        planningPlacesDraggable:this.planningPlaces,
+        draggableOptions:{group : "plan", animation:300, disabled:true},
+        disableTrandition:false,
     };
   },
   methods:{
@@ -166,9 +176,21 @@ export default {
     tabClick: function(tab){
       this.tabIndex = tab.index;
       this.$emit('tabClick');
-
+    },
+    deleteDurationBeforeDragging: function(){
+      var durationCards = document.getElementsByClassName("duration-cards");
+      for (var i = 0; durationCards.length > i; i++) {
+        durationCards[i].style.display = "none";
+      }
+    },
+    calcurateRouteAfterDragging: function(){
+      console.log("end");
     }
+
   },
+  mounted: function(){
+    console.log(this.planningPlacesDraggable);
+  }
 }
 
 </script>
@@ -370,5 +392,15 @@ export default {
  .bar-bottom__dot{
    bottom: 20px;
  }
+
+ .duration-cards{
+   display: block;
+   opacity: 1;
+   /* transition: display 1s; */
+ }
+
+ .disable-transition {
+    transition: transform 0s;
+}
 
 </style>
