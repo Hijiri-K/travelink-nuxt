@@ -21,7 +21,7 @@
            </div>
          </div>
          <el-card :body-style="{ padding: '0px'}" class="duration-card duration-card-start inline-block">
-           <span>出発：</span> <el-time-select
+           <span>Day{{day.id}} 出発：</span> <el-time-select
                          v-model="startTime"
                          :picker-options=picker_options
                          :clearable=clearable
@@ -33,7 +33,7 @@
                      </el-time-select>
          </el-card>
        </div>
-       <draggable :list="planningPlacesDraggable[day.id-1]" @start="deleteDurationBeforeDragging" @end="calcurateRouteAfterDragging" :options='draggableOptions'>
+       <draggable :list="planningPlacesDraggable[day.id-1]" :move="checkMove" @start="deleteDurationBeforeDragging" @end="calcurateRouteAfterDragging" :options='draggableOptions'>
          <transition-group tag="div" name="itinerary-transition">
            <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id"  :class="{ 'disable-transition' : disableTrandition }">
              <div class="" v-if="place.place_id != null">
@@ -142,7 +142,7 @@ export default {
         editable:false,
         tabIndex:0,
         planningPlacesDraggable:this.planningPlaces,
-        draggableOptions:{group : "plan", animation:300, disabled:true, forceFallback:true},
+        draggableOptions:{group : "plan", animation:300, disabled:true, forceFallback:true, delay:150},
         disableTrandition:false,
     };
   },
@@ -182,9 +182,33 @@ export default {
       for (var i = 0; durationCards.length > i; i++) {
         durationCards[i].style.display = "none";
       }
+
     },
     calcurateRouteAfterDragging: function(){
       console.log("end");
+      console.log(this.planningPlacesDraggable);
+
+      var filteredPlanningPlacesDraggable = [];
+      var numOfDailyPlaces = [];
+      for (var i = 0; this.planningPlacesDraggable.length > i; i++) {
+        var filteredDailyPlanningPlacesDraggable = this.planningPlacesDraggable[i].filter(planningPlaceDraggable => planningPlaceDraggable.title != null);
+        numOfDailyPlaces.push(filteredDailyPlanningPlacesDraggable.length);
+        filteredPlanningPlacesDraggable.push(...filteredDailyPlanningPlacesDraggable)
+      }
+      console.log(filteredPlanningPlacesDraggable);
+      this.$emit('calculateRoute', filteredPlanningPlacesDraggable, numOfDailyPlaces);
+
+      var durationCards = document.getElementsByClassName("duration-cards");
+      for (var i = 0; durationCards.length > i; i++) {
+        durationCards[i].style.display = "block";
+      }
+    },
+    checkMove: function(evt) {
+      var IfDraggable = (evt.draggedContext.element.type!=='hotel' && evt.relatedContext.element.type!=='hotel');
+      if (IfDraggable == false) [
+        this.$emit('setAlertMessage', "hotel cannot be moved")
+      ]
+      　return IfDraggable
     }
 
   },
@@ -409,5 +433,6 @@ export default {
 .sortable-ghost{
   opacity: .01;
 }
+
 
 </style>

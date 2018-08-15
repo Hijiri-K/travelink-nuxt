@@ -37,12 +37,12 @@
       <el-row :gutter="20">
         <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
         <el-col :sm=12 :xs=24 id="itinerary-box">
-          <div id="itinerary-btns-wrapper">
+          <div id="itinerary-btns-wrapper" class="hidden-xs-only">
             <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='parentsMethod' border>Optimize</el-checkbox>
             <span id="edit-itinerary-btn" @click='editItinerary'>Edit</span>
           </div>
 
-          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary"></tl-itinerary>
+          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary" @calculateRoute="parentsMethod" @setAlertMessage="setAlertMessage"></tl-itinerary>
         </el-col>
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
 
@@ -56,6 +56,8 @@
       </el-row>
 
     </el-main>
+    <el-alert v-if="alertMessage != null " :title="alertMessage" type="warning">
+</el-alert>
   </el-container>
 </template>
 
@@ -63,6 +65,7 @@
 /* 全体のレイアウト */
 body{
   margin:0;
+  /* background-color: #f8f8ff; */
 }
 
 
@@ -259,7 +262,7 @@ body{
 }
 
 .el-tabs__header {
-  width: calc(50% - 170px) !important;
+  width: calc(50% - 170px);
   position: fixed;
   z-index: 10;
   background-color: #fff;
@@ -291,7 +294,7 @@ body{
   box-sizing: border-box;
   border-radius: 4px;
   text-align: center;
-  transition: background-color .3s;
+  transition: background-color .4s;
 }
 
 #optimize-itinerary{
@@ -301,9 +304,18 @@ body{
   margin-left: 7px;
   line-height: 26px;
 }
+
 .el-checkbox__label{
   padding-left:4px;
 }
+
+.el-alert{
+  position: fixed !important;
+  bottom:8px !important;
+  left:20px;
+  width:calc(100%-40px);
+}
+
 </style>
 <script>
 // import HelloTemp from '../components/hello_temp.vue'
@@ -334,19 +346,19 @@ var windowWidth = 768;
  * 観光地の選択肢の配列（BD化）
  * @type {Array}
  */
-var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, default: true},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, default: true},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, default: false},
-              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, default: true},
-              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", title: '城島高原パーク', group: '宿', staying:180, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
+var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", type:'place',title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, default: true},
+              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", type:'place', title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, default: true},
+              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", type:'place', title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, default: false},
+              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", type:'place', title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, default: true},
+              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", type:'place', title: '城島高原パーク', group: '宿', staying:180, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
               ]
 /**
  * ホテルの選択肢の配列（BD化）
  * @type {Array}
  */
-var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}},
-              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
-              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
+var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", type:'hotel', title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}},
+              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", type:'hotel', title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
+              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", type:'hotel', title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
               ]
 
 /**
@@ -408,7 +420,8 @@ export default {
           planDays:[{id:1,day:1},{id:2,day:2},{id:3,day:3}],
           styleObject: {transform: 'translateX(0)'},
           editItineraryBtn:false,
-          optimizeItinerary:true
+          optimizeItinerary:true,
+          alertMessage:null
       }
     },
     methods: {
@@ -416,7 +429,7 @@ export default {
        * 最適ルートを算出するメソッド
        * @param  {Array} selectedPlaces [description]
        */
-      parentsMethod: function(selectedPlaces) {
+      parentsMethod: function(selectedPlaces, numsOfDailyPlaces) {
         //引き数によって処理の内容を変更
         //・optimizeボタンからfalse->スキップ
         //・optimizeボタンからtrue->altSelectedPlacesを使って計算
@@ -426,12 +439,14 @@ export default {
         } else {
           console.log('Calculating : true');
           if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
-            selectedPlaces = altSelectedPlaces;
+            selectedPlaces = this.$refs.itineraryEdit.selectedPlaces;
           } else {
             altSelectedPlaces = selectedPlaces;
           }
 
         console.log("Optimized : " + this.optimizeItinerary)
+        console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
+        console.log(numsOfDailyPlaces);
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
         dailyFirstPlaces.length = 0
@@ -493,6 +508,8 @@ export default {
               var a = response.geocoded_waypoints.length - 1;
               var totalDuration = 0;
               var durationBetweenPlaces;
+              var numOfDailyPlacesIndex = 0;
+              var i2 = 1;
 
               //responseのplace_idをキーに検索して、planningPlacesのインデックスを調べる。
               for (var place_id of response.geocoded_waypoints) {
@@ -514,22 +531,42 @@ export default {
                   dailyPlanningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: totalDuration})
                 }
 
-                if(totalDuration >= DAILY_MAX_TOTAL_TIME || i == selectedPlaces.length - 1){
-                  planningPlaces.push(dailyPlanningPlaces);
-                  // if (i =! 1){ //初日の最初の場所は不要なため
-                    dailyFirstPlaces.push(dailyPlanningPlaces[0])
-                  // }
+                //numsOfDailyPlacesがundefinedの場合（itineraryのcalcurateRouteAfterDragging以外から呼び出された場合）
+                if (numsOfDailyPlaces == undefined) {
 
-                  if (i != selectedPlaces.length - 1 ){ //最終日にはホテルが不要なため（バグ対策でもある）
-                    dailyLastPlaces.push(dailyPlanningPlaces[dailyPlanningPlaces.length - 2]);
+                  if(totalDuration >= DAILY_MAX_TOTAL_TIME || i == selectedPlaces.length - 1){
+                    planningPlaces.push(dailyPlanningPlaces);
+                    // if (i =! 1){ //初日の最初の場所は不要なため
+                      dailyFirstPlaces.push(dailyPlanningPlaces[0])
+                    // }
+
+                    if (i != selectedPlaces.length - 1 ){ //最終日にはホテルが不要なため（バグ対策でもある）
+                      dailyLastPlaces.push(dailyPlanningPlaces[dailyPlanningPlaces.length - 2]);
+                    }
+
+                    dailyPlanningPlaces = [];
+                    totalDuration = 0;
                   }
 
-                  dailyPlanningPlaces = [];
-                  totalDuration = 0;
+                } else {
+                  var numOfDailyPlaces = numsOfDailyPlaces[numOfDailyPlacesIndex];
+                  console.log("numOfDailyPlaces: " + numOfDailyPlaces);
+                    if (numOfDailyPlaces == i2 || i == selectedPlaces.length - 1 ) {
+                      planningPlaces.push(dailyPlanningPlaces);
+                      dailyPlanningPlaces = [];
+                      numOfDailyPlacesIndex++;
+                      console.log("push");
+                      i2 = 0;
+                    }
                 }
+
                 i += 1;
+                i2 += 1;
                 }
               }
+
+
+            if (numsOfDailyPlaces == undefined) {
 
             //最短距離のホテルの検索
             // DistanceMatrix サービスを生成
@@ -623,11 +660,15 @@ export default {
             		}
             	}
             });
+
+          }//テスト用
+
           } else {
             window.alert('Directions request failed due to ' + status);
           }
         });
       }
+      console.log(this.planningPlaces)
       this.calcPercentage();
       }
     },
@@ -663,6 +704,9 @@ export default {
         totalTime += staying;
         this.percentage = Math.round(totalTime / maxTime * 100);
       }
+      if (this.percentage > 100) {
+        this.setAlertMessage("Too many schedules. Please add more days.")
+      }
     },
 
     changeTab: function(){
@@ -691,20 +735,22 @@ export default {
     resizeWindow: function(){
       windowWidth = window.innerWidth;
       var tabIndex = this.$refs.itinerary.tabIndex;
+      var elTabsHeader = document.getElementsByClassName("el-tabs__header");
       var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
       var itineraryEditBox = document.getElementById("itinerary-edit-box");
       var widthDevide = 2;
 
       itineraryEditBox.style.left = "50%"
       itineraryEditBox.style.display = "block"
+      elTabsHeader[0].style.width = "calc(50%-170px)";
 
       //スマホの場合は横幅は2分しない
       if (windowWidth < 768) {
+        elTabsHeader[0].style.width = windowWidth - 10 + "px";
         widthDevide = 1;
         itineraryEditBox.style.left = 0
         itineraryEditBox.style.display = "none"
       }
-      console.log( this.planDays.length);
       //日数で必要なwidthを計算
       var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
       for (var i = 0; i <= this.planDays.length - 1; i++ ) {
@@ -732,13 +778,18 @@ export default {
     editItinerary: function(){
       var itineraryBox = document.getElementById("itinerary-box");
       var itineraryEditBox = document.getElementById("itinerary-edit-box");
+      var elTabsHeader = document.getElementsByClassName("el-tabs__header");
       var editItineraryBtn = document.getElementById("edit-itinerary-btn");
-      var itineraryBtnsWrapper= document.getElementById("itinerary-btns-wrapper");
+      var itineraryBtnsWrapper = document.getElementById("itinerary-btns-wrapper");
+
+      console.log(elTabsHeader);
+
       if (this.editItineraryBtn == false) {
         console.log("edit");
-        itineraryEditBox.style.left = "100%"
-        itineraryBox.style.width = "100%"
-        itineraryBtnsWrapper.style.left = itineraryBtnsWrapper.style.left = "calc(100% - 170px)";
+        itineraryEditBox.style.left = "100%";
+        itineraryBox.style.width = "100%";
+        elTabsHeader[0].style.width = "calc(100% - 170px)";
+        itineraryBtnsWrapper.style.left = "calc(100% - 170px)";
         editItineraryBtn.style.backgroundColor =  "#f56c6c";
         editItineraryBtn.style.border =  "solid 1px #f56c6c";
         editItineraryBtn.textContent = "close";
@@ -750,6 +801,7 @@ export default {
         console.log("close");
         itineraryEditBox.style.left = "50%"
         itineraryBox.style.width = "50%"
+        elTabsHeader[0].style.width = "calc(50% - 170px)";
         itineraryBtnsWrapper.style.left = "calc(50% - 170px)";
         editItineraryBtn.style.backgroundColor =  "#409eff";
         editItineraryBtn.style.border =  "solid 1px #409eff";
@@ -757,8 +809,14 @@ export default {
         this.editItineraryBtn = false;
         this.$refs.itinerary.draggableOptions.disabled = true;
         this.$refs.itinerary.disableTrandition = false;
-
       }
+    },
+    setAlertMessage: function(message) {
+      this.alertMessage = message;
+      setTimeout(this.removeAlertMessage,3000)
+    },
+    removeAlertMessage: function(){
+      this.alertMessage = null;
     }
   },
 
@@ -772,15 +830,19 @@ export default {
     // var tabIndex = this.$refs.itinerary.tabIndex;
     var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
     var itineraryEditBox = document.getElementById("itinerary-edit-box");
+    var elTabsHeader = document.getElementsByClassName("el-tabs__header");
     var widthDevide = 2;
 
     itineraryEditBox.style.left = "50%"
     itineraryEditBox.style.display = "block"
+    elTabsHeader[0].style.width = "calc(50%-170px)";
+
     //スマホの場合は横幅は2分しない
     if (windowWidth < 768) {
       widthDevide = 1;
       itineraryEditBox.style.left = 0
       itineraryEditBox.style.display = "none"
+      elTabsHeader[0].style.width = windowWidth - 10 + "px";
     }
 
     var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
