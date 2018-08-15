@@ -441,9 +441,11 @@ export default {
           if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
             selectedPlaces = this.$refs.itineraryEdit.selectedPlaces;
           } else {
-            altSelectedPlaces = selectedPlaces;
+            // altSelectedPlaces = selectedPlaces;　//TODO: 不要なはず
           }
 
+        altSelectedPlaces = selectedPlaces;　
+        
         console.log("Optimized : " + this.optimizeItinerary)
         console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
         console.log(numsOfDailyPlaces);
