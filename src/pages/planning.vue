@@ -445,7 +445,7 @@ export default {
           }
 
         altSelectedPlaces = selectedPlaces;　
-        
+
         console.log("Optimized : " + this.optimizeItinerary)
         console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
         console.log(numsOfDailyPlaces);
@@ -534,7 +534,7 @@ export default {
                 }
 
                 //numsOfDailyPlacesがundefinedの場合（itineraryのcalcurateRouteAfterDragging以外から呼び出された場合）
-                if (numsOfDailyPlaces == undefined) {
+                if (numsOfDailyPlaces == undefined || typeof numsOfDailyPlaces == "object" ) { //TODO:editの後にoptimizeが押されるとnumsOfDailyPlacesにundefinedではなく、[object Event]が入ってくるので、この場合もtrueにしたい。（修正済み）
 
                   if(totalDuration >= DAILY_MAX_TOTAL_TIME || i == selectedPlaces.length - 1){
                     planningPlaces.push(dailyPlanningPlaces);
@@ -568,7 +568,7 @@ export default {
               }
 
 
-            if (numsOfDailyPlaces == undefined) {
+            if (numsOfDailyPlaces == undefined  || typeof numsOfDailyPlaces == "object") {　//TODO:editの後にoptimizeが押されるとnumsOfDailyPlacesにundefinedではなく、[object Event]が入ってくるので、この場合もtrueにしたい。(修正済み)
 
             //最短距離のホテルの検索
             // DistanceMatrix サービスを生成
