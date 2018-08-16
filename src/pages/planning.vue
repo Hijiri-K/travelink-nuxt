@@ -38,7 +38,7 @@
         <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
         <el-col :sm=12 :xs=24 id="itinerary-box">
           <div id="itinerary-btns-wrapper" class="hidden-xs-only">
-            <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='parentsMethod' border>Optimize</el-checkbox>
+            <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='clickOptimizeBtn' border>Optimize</el-checkbox>
             <span id="edit-itinerary-btn" @click='editItinerary'>Edit</span>
           </div>
 
@@ -434,21 +434,23 @@ export default {
         //・optimizeボタンからfalse->スキップ
         //・optimizeボタンからtrue->altSelectedPlacesを使って計算
         //・itineraryEditから配列->引数を使って計算
-        if (typeof selectedPlaces == "boolean" && selectedPlaces == false) {
-          console.log('Calculating : false');
-        } else {
-          console.log('Calculating : true');
-          if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
-            selectedPlaces = this.$refs.itineraryEdit.selectedPlaces;
-          } else {
-            // altSelectedPlaces = selectedPlaces;　//TODO: 不要なはず
-          }
+        // if (typeof selectedPlaces == "boolean" && selectedPlaces == false) {
+        //   console.log('Calculating : false');
+        // } else {
+        //   console.log('Calculating : true');
+        //   if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
+        //     selectedPlaces = this.$refs.itineraryEdit.selectedPlaces;
+        //   } else {
+        //     // altSelectedPlaces = selectedPlaces;　//TODO: 不要なはず
+        //   }
 
         altSelectedPlaces = selectedPlaces;　
 
-        console.log("Optimized : " + this.optimizeItinerary)
-        console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
+        // console.log("Optimized : " + this.optimizeItinerary)
+        // console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
+        console.log(selectedPlaces);
         console.log(numsOfDailyPlaces);
+
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
         dailyFirstPlaces.length = 0
@@ -672,7 +674,7 @@ export default {
       }
       console.log(this.planningPlaces)
       this.calcPercentage();
-      }
+      // }
     },
 
     /**
@@ -819,12 +821,17 @@ export default {
     },
     removeAlertMessage: function(){
       this.alertMessage = null;
+    },
+    clickOptimizeBtn: function(){
+      if (this.optimizeItinerary == true) {
+        this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces);
+      }
     }
   },
 
   mounted: function(){
     console.log("mounted");
-    this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces)
+    this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces, false)
     window.addEventListener('resize', this.resizeWindow)
 
     // thisで書いてもうまく発火しないので、コピペで対処

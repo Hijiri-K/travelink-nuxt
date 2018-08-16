@@ -5,7 +5,7 @@
         <div class="itinerary-item-wrapper  inline-block">
           <el-card :body-style="{ padding: '0px' }" class="itinerary-item">
             <div class="check-box-wrapper inline-block">
-                <div class="tl-checkbox"><el-checkbox class="itinerary-edit-checkbox" v-bind:label="place" name="" :checked="place.default" @change='$emit("childs-event", selectedPlaces)'></el-checkbox></div>
+                <div class="tl-checkbox"><el-checkbox class="itinerary-edit-checkbox" v-bind:label="place" name="" :checked="place.default" @change='changeSelectedPlaces'></el-checkbox></div>
             </div><!--
              --><div class="itinerary-item__image inline-block">
                   <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
@@ -116,6 +116,11 @@
           selectedPlaces: [],
           fill: 'fff'
       };
+    },
+    methods:{
+      changeSelectedPlaces: function(){
+        this.$emit("childs-event", this.selectedPlaces)
+      }
     },
     mounted: function(){
       console.log(this.selectedPlaces)

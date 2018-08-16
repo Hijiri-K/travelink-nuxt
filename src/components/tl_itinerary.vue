@@ -185,8 +185,8 @@ export default {
 
     },
     calcurateRouteAfterDragging: function(){
-      console.log("end");
-      console.log(this.planningPlacesDraggable);
+      // console.log("end");
+      // console.log(this.planningPlacesDraggable);
 
       var filteredPlanningPlacesDraggable = [];
       var numOfDailyPlaces = [];
@@ -195,7 +195,7 @@ export default {
         numOfDailyPlaces.push(filteredDailyPlanningPlacesDraggable.length);
         filteredPlanningPlacesDraggable.push(...filteredDailyPlanningPlacesDraggable)
       }
-      console.log(filteredPlanningPlacesDraggable);
+      // console.log(filteredPlanningPlacesDraggable);
       this.$emit('calculateRoute', filteredPlanningPlacesDraggable, numOfDailyPlaces);
 
       var durationCards = document.getElementsByClassName("duration-cards");
@@ -213,7 +213,7 @@ export default {
 
   },
   mounted: function(){
-    console.log(this.planningPlacesDraggable);
+    // console.log(this.planningPlacesDraggable);
   }
 }
 
