@@ -22,7 +22,7 @@
             </el-tab-pane>
             <el-tab-pane label="Edit"  name="editSp">
               <tl-schedule v-bind:percentage="percentage" class="schedule-wrapper"  @childs-event="parentsMethod2"></tl-schedule>
-              <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+              <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="calculateRoute" class="itinerary-edit-wrapper"></tl-itinerary-edit>
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -42,11 +42,11 @@
             <span id="edit-itinerary-btn" @click='editItinerary'>Edit</span>
           </div>
 
-          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary" @calculateRoute="parentsMethod" @setAlertMessage="setAlertMessage"></tl-itinerary>
+          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary" @calculateRoute="calculateRoute" @setAlertMessage="setAlertMessage"></tl-itinerary>
         </el-col>
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
 
-          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="parentsMethod" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="calculateRoute" class="itinerary-edit-wrapper"></tl-itinerary-edit>
         </el-col>
         <div id="switch-buttons" class="hidden-sm-and-up">
           <div class="switch-button" @click="changeSpTab('itinerary'), styleObject.transform='translateX(0)'">itinerary</div>
@@ -429,7 +429,7 @@ export default {
        * 最適ルートを算出するメソッド
        * @param  {Array} selectedPlaces [description]
        */
-      parentsMethod: function(selectedPlaces, numsOfDailyPlaces) {
+      calculateRoute: function(selectedPlaces, numsOfDailyPlaces) {
         //引き数によって処理の内容を変更
         //・optimizeボタンからfalse->スキップ
         //・optimizeボタンからtrue->altSelectedPlacesを使って計算
@@ -448,8 +448,8 @@ export default {
 
         // console.log("Optimized : " + this.optimizeItinerary)
         // console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
-        console.log(selectedPlaces);
-        console.log(numsOfDailyPlaces);
+        // console.log(selectedPlaces);
+        // console.log(numsOfDailyPlaces);
 
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
@@ -672,7 +672,7 @@ export default {
           }
         });
       }
-      console.log(this.planningPlaces)
+      // console.log(this.planningPlaces)
       this.calcPercentage();
       // }
     },
@@ -824,14 +824,14 @@ export default {
     },
     clickOptimizeBtn: function(){
       if (this.optimizeItinerary == true) {
-        this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces);
+        this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces);
       }
     }
   },
 
   mounted: function(){
     console.log("mounted");
-    this.parentsMethod(this.$refs.itineraryEdit.selectedPlaces, false)
+    this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces, false)
     window.addEventListener('resize', this.resizeWindow)
 
     // thisで書いてもうまく発火しないので、コピペで対処
