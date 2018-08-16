@@ -119,7 +119,7 @@
     },
     methods:{
       changeSelectedPlaces: function(){
-        this.$emit("childs-event", this.selectedPlaces)
+        this.$emit("calculateRoute", this.selectedPlaces)
       }
     },
     mounted: function(){

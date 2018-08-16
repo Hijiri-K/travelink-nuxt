@@ -35,7 +35,7 @@
 
 <!-- PC,iPad用 -->
       <el-row :gutter="20">
-        <tl-schedule v-bind:percentage="percentage" @childs-event="parentsMethod2"></tl-schedule>
+        <tl-schedule v-bind:percentage="percentage" @childs-event="calculateSchedule"></tl-schedule>
         <el-col :sm=12 :xs=24 id="itinerary-box">
           <div id="itinerary-btns-wrapper" class="hidden-xs-only">
             <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='clickOptimizeBtn' border>Optimize</el-checkbox>
@@ -46,7 +46,7 @@
         </el-col>
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
 
-          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @childs-event="calculateRoute" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" class="itinerary-edit-wrapper"></tl-itinerary-edit>
         </el-col>
         <div id="switch-buttons" class="hidden-sm-and-up">
           <div class="switch-button" @click="changeSpTab('itinerary'), styleObject.transform='translateX(0)'">itinerary</div>
@@ -681,7 +681,8 @@ export default {
      * 旅行の日数を配列に入れるメソッド
      * @param  {Array} schedule [description]
      */
-    parentsMethod2: function(schedule){
+    calculateSchedule: function(schedule){
+      console.log("called");
       this.planDays = [];
       var date_calculate = schedule[1] - schedule[0];
       var planDays = date_calculate / 86400000 + 1; //秒から日に変換
