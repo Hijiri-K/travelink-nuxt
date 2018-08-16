@@ -430,27 +430,7 @@ export default {
        * @param  {Array} selectedPlaces [description]
        */
       calculateRoute: function(selectedPlaces, numsOfDailyPlaces) {
-        //引き数によって処理の内容を変更
-        //・optimizeボタンからfalse->スキップ
-        //・optimizeボタンからtrue->altSelectedPlacesを使って計算
-        //・itineraryEditから配列->引数を使って計算
-        // if (typeof selectedPlaces == "boolean" && selectedPlaces == false) {
-        //   console.log('Calculating : false');
-        // } else {
-        //   console.log('Calculating : true');
-        //   if (typeof selectedPlaces == "boolean" && selectedPlaces == true) {
-        //     selectedPlaces = this.$refs.itineraryEdit.selectedPlaces;
-        //   } else {
-        //     // altSelectedPlaces = selectedPlaces;　//TODO: 不要なはず
-        //   }
-
         altSelectedPlaces = selectedPlaces;　
-
-        // console.log("Optimized : " + this.optimizeItinerary)
-        // console.log("numsOfDailyPlaces: " + numsOfDailyPlaces);
-        // console.log(selectedPlaces);
-        // console.log(numsOfDailyPlaces);
-
         planningPlaces.length = 0 //選択地点のリセット
         dailyLastPlaces.length = 0
         dailyFirstPlaces.length = 0
@@ -536,7 +516,7 @@ export default {
                 }
 
                 //numsOfDailyPlacesがundefinedの場合（itineraryのcalcurateRouteAfterDragging以外から呼び出された場合）
-                if (numsOfDailyPlaces == undefined) { //TODO:editの後にoptimizeが押されるとnumsOfDailyPlacesにundefinedではなく、[object Event]が入ってくるので、この場合もtrueにしたい。
+                if (numsOfDailyPlaces == undefined) {
 
                   if(totalDuration >= DAILY_MAX_TOTAL_TIME || i == selectedPlaces.length - 1){
                     planningPlaces.push(dailyPlanningPlaces);
@@ -563,14 +543,12 @@ export default {
                       i2 = 0;
                     }
                 }
-
                 i += 1;
                 i2 += 1;
                 }
               }
 
-
-            if (numsOfDailyPlaces == undefined) {　//TODO:editの後にoptimizeが押されるとnumsOfDailyPlacesにundefinedではなく、[object Event]が入ってくるので、この場合もtrueにしたい。
+            if (numsOfDailyPlaces == undefined) {
 
             //最短距離のホテルの検索
             // DistanceMatrix サービスを生成
