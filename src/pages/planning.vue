@@ -48,7 +48,7 @@
         </el-col>
 
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
-          <tl-itinerary-edit class="tl-itinerary-edit" ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" >
+          <tl-itinerary-edit class="tl-itinerary-edit hidden-xs-only" ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" >
           </tl-itinerary-edit>
         </el-col>
 
@@ -235,7 +235,7 @@ body{
 .el-tab-pane{
   display: block !important;
   float:left !important;
-  width:400px;
+  width:100%;
   height:100%;
   overflow-y: auto;
 }
@@ -244,6 +244,7 @@ body{
   transition: left .3s;
   margin-top:50px;
   height:calc(100% - 50px);
+  width:100%;
 }
 
 .el-tabs{
@@ -687,58 +688,23 @@ export default {
     changeTab: function(){
       var tabIndex = this.$refs.itinerary.tabIndex;
       var elTabs = document.getElementsByClassName("el-tabs__content");
-      var widthDevide = 2;
-      if (windowWidth < 768) {
-        widthDevide = 1;
-      }
+      // var widthDevide = 2;
+      // if (windowWidth < 768) {
+      //   widthDevide = 1;
+      // }
       var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
       //日数で必要なwidthを計算
-      var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
+      // var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
+      var elTabPaneWidth = 100 / this.planDays.length + "%";
       for (var i = 0; i <= this.planDays.length - 1; i++ ) {
         elTabPane[i].style.width =  elTabPaneWidth;
       }
 
-      var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
-      elTabs[0].style.width =  (windowWidth / widthDevide - 20) * this.planDays.length  + "px" ;
+      var elTabsLeftPx = tabIndex * -100 + '%'
+      elTabs[0].style.width =  100 * this.planDays.length  + "%" ;
       elTabs[0].style.left = elTabsLeftPx;
+      },
 
-    },
-    /**
-     * 画面サイズに合わせて描画をリサイズするメソッド
-     * @return {[type]} [description]
-     */
-    resizeWindow: function(){
-      windowWidth = window.innerWidth;
-      var tabIndex = this.$refs.itinerary.tabIndex;
-      var elTabsHeader = document.getElementsByClassName("el-tabs__header");
-      var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
-      var itineraryEditBox = document.getElementById("itinerary-edit-box");
-      var widthDevide = 2;
-
-      itineraryEditBox.style.left = "50%"
-      itineraryEditBox.style.display = "block"
-      elTabsHeader[0].style.width = "calc(50%-170px)";
-
-      //スマホの場合は横幅は2分しない
-      if (windowWidth < 768) {
-        elTabsHeader[0].style.width = windowWidth - 10 + "px";
-        widthDevide = 1;
-        itineraryEditBox.style.left = 0
-        itineraryEditBox.style.display = "none"
-      }
-      //日数で必要なwidthを計算
-      var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
-      for (var i = 0; i <= this.planDays.length - 1; i++ ) {
-        elTabPane[i].style.width =  elTabPaneWidth;
-      }
-
-      var elTabs = document.getElementsByClassName("el-tabs__content");
-      var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
-      elTabs[0].style.width =  (windowWidth / widthDevide - 10) * this.planDays.length  + "px" ;
-      elTabs[0].style.left = elTabsLeftPx;
-      console.log("resized");
-
-    },
     changeSpTab:function(tabName){
       var itineraryBox = document.getElementById("itinerary-box");
       var itineraryEditBox = document.getElementById("itinerary-edit-box");
@@ -803,37 +769,6 @@ export default {
   mounted: function(){
     console.log("mounted");
     this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces, false)
-    window.addEventListener('resize', this.resizeWindow)
-
-    // thisで書いてもうまく発火しないので、コピペで対処
-    windowWidth = window.innerWidth;
-    // var tabIndex = this.$refs.itinerary.tabIndex;
-    var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
-    var itineraryEditBox = document.getElementById("itinerary-edit-box");
-    var elTabsHeader = document.getElementsByClassName("el-tabs__header");
-    var widthDevide = 2;
-
-    itineraryEditBox.style.left = "50%"
-    itineraryEditBox.style.display = "block"
-    elTabsHeader[0].style.width = "calc(50%-170px)";
-
-    //スマホの場合は横幅は2分しない
-    if (windowWidth < 768) {
-      widthDevide = 1;
-      itineraryEditBox.style.left = 0
-      itineraryEditBox.style.display = "none"
-      elTabsHeader[0].style.width = windowWidth - 10 + "px";
-    }
-
-    var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
-    for (var i = 0; i <= elTabPane.length - 1; i++ ) {
-      elTabPane[i].style.width =  elTabPaneWidth;
-    }
-
-    var elTabs = document.getElementsByClassName("el-tabs__content");
-    // var elTabsLeftPx = tabIndex * (-windowWidth  / widthDevide + 20 ) + "px";
-    elTabs[0].style.width =  (windowWidth / widthDevide - 20) * this.planDays.length  + "px" ;
-    // elTabs[0].style.left = elTabsLeftPx;
   },
 
   beforeMount: function(){
