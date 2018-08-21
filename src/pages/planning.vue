@@ -332,8 +332,6 @@ import TlMap from '../components/tl_map.vue'
 import TlItinerary from '../components/tl_itinerary.vue'
 import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 
-
-var windowWidth = 768;
 /**
  * 観光地の選択肢の配列（BD化）
  * @type {Array}
@@ -688,13 +686,9 @@ export default {
     changeTab: function(){
       var tabIndex = this.$refs.itinerary.tabIndex;
       var elTabs = document.getElementsByClassName("el-tabs__content");
-      // var widthDevide = 2;
-      // if (windowWidth < 768) {
-      //   widthDevide = 1;
-      // }
+
       var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
-      //日数で必要なwidthを計算
-      // var elTabPaneWidth = (windowWidth / widthDevide - 20) + "px";
+
       var elTabPaneWidth = 100 / this.planDays.length + "%";
       for (var i = 0; i <= this.planDays.length - 1; i++ ) {
         elTabPane[i].style.width =  elTabPaneWidth;
