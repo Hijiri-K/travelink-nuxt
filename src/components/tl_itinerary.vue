@@ -1,13 +1,13 @@
 <template>
-<div class="">
+<div class="tl-itinerary-wrapper">
   <el-tabs type="card" @tab-click="tabClick">
      <el-tab-pane  v-for="day in planDays"
                     :key='day.id'
                     :label='"Day "+day.id'
                     class = "tlItinerary"
                     >
-       <div class="itinerary-wrapper-wrapper">
-         <div class="" >
+       <div class="itinerary-wrapper">
+         <div class="start-time-wrapper" >
          <div class="time-line-wrapper top inline-block">
            <div class="" v-if="planningPlaces[day.id -1] != undefined">
              <div class="time-line__line-wrapper top inline-block">
@@ -33,10 +33,10 @@
                      </el-time-select>
          </el-card>
        </div>
-       <draggable :list="planningPlacesDraggable[day.id-1]" :move="checkMove" @start="deleteDurationBeforeDragging" @end="calcurateRouteAfterDragging" :options='draggableOptions'>
+       <draggable class="itinerary-wrapper" :list="planningPlacesDraggable[day.id-1]" :move="checkMove" @start="deleteDurationBeforeDragging" @end="calcurateRouteAfterDragging" :options='draggableOptions'>
          <transition-group tag="div" name="itinerary-transition">
-           <div class="itinerary-wrapper itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id"  :class="{ 'disable-transition' : disableTrandition }">
-             <div class="" v-if="place.place_id != null">
+           <div class="itinerary-transition-item" v-for="place in planningPlaces[day.id-1]" v-bind:key="place.id"  :class="{ 'disable-transition' : disableTrandition }">
+             <div v-if="place.place_id != null">
                <div class="time-line-wrapper inline-block" >
                  <div class="time-line__line-wrapper inline-block">
                    <div class="time-line__line">
@@ -45,23 +45,23 @@
               --><div class="time-line__time inline-block">
                  </div>
                </div><!--
-            --><div class="itinerary-item-wrapper  inline-block">
-                 <el-card :body-style="{ padding: '0px' }" class="itinerary-item"><!--
-                    --><div class="itinerary-item__image inline-block">
+            --><div class="place-card-wrapper inline-block">
+                 <el-card :body-style="{ padding: '0px' }" class="place-card"><!--
+                    --><div class="place-card__image inline-block">
                          <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
                        </div><!--
-                    --><div class="itinerary-item__contents inline-block">
-                         <section class="itinerary-item__contents__section">
+                    --><div class="place-card__contents inline-block">
+                         <section class="place-card__contents__section">
                            <h3>{{place.title}}</h3>
-                           <div class="itinerary-item__contents__section__category">
+                           <div class="place-card__contents__section__category">
                              <p>種類：{{place.group}}　滞在時間：{{place.staying}} min</p>
                            </div>
-                           <div class="itinerary-item__contents__section__stay">
+                           <div class="place-card__contents__section__stay">
                            </div>
-                           <div class="itinerary-item__contents__section__discription">
+                           <div class="place-card__contents__section__discription">
                              <p>{{place.discription}}</p>
                            </div>
-                           <div class="itinerary-item__contents__section__price">
+                           <div class="place-card__contents__section__price">
                              <p>{{place.currency}}{{place.price}}</p>
                            </div>
                          </section>
@@ -70,27 +70,27 @@
                </div><!--
           --></div><!--
           --><div v-if="place.duration != null">
-             <div class="duration-cards">
-               <div class="time-line-wrapper inline-block duration-card-time-line">
-                 <div class="time-line__line-wrapper inline-block duration-card-time-line">
-                   <div class="time-line__line">
-                     <span class="time-line__line__dot dot-start"></span>
-                     <span class="time-line__line__dot dot-finish"></span>
-                   </div>
+               <div class="duration-card-wrapper" v-bind:style="durationCardsStyle">
+                 <div class="time-line-wrapper inline-block duration-card-time-line">
+                   <div class="time-line__line-wrapper inline-block duration-card-time-line">
+                     <div class="time-line__line">
+                       <span class="time-line__line__dot dot-start"></span>
+                       <span class="time-line__line__dot dot-finish"></span>
+                     </div>
+                   </div><!--
+                   --><div class="time-line__time inline-block">
+                         <div class="time-line__time-start">
+                             <p>{{calcStartTime(place.startTime, place.duration)}}</p>
+                         </div>
+                         <div class="time-line__time-finish">
+                             <p>{{calcFinishTime(place.startTime)}}</p>
+                         </div>
+                      </div>
                  </div><!--
-                 --><div class="time-line__time inline-block">
-                       <div class="time-line__time-start">
-                           <p>{{calcStartTime(place.startTime, place.duration)}}</p>
-                       </div>
-                       <div class="time-line__time-finish">
-                           <p>{{calcFinishTime(place.startTime)}}</p>
-                       </div>
-                    </div>
-               </div><!--
-            --><el-card :body-style="{ padding: '0px'}" class="duration-card inline-block">
-                 <p>移動時間：{{place.duration}}min</p>
-               </el-card>
-             </div>
+              --><el-card :body-style="{ padding: '0px'}" class="duration-card inline-block">
+                   <p>移動時間：{{place.duration}}min</p>
+                 </el-card>
+               </div>
              </div>
            </div>
          </transition-group>
@@ -142,8 +142,11 @@ export default {
         editable:false,
         tabIndex:0,
         planningPlacesDraggable:this.planningPlaces,
-        draggableOptions:{group : "plan", animation:300, disabled:true, forceFallback:true, delay:150},
+        draggableOptions:{group : "plan", animation:300, disabled:true, forceFallback:true, delay:50},
         disableTrandition:false,
+        durationCardsStyle:{
+          display:'block',
+        }
     };
   },
   methods:{
@@ -178,16 +181,14 @@ export default {
       this.$emit('tabClick');
     },
     deleteDurationBeforeDragging: function(){
-      var durationCards = document.getElementsByClassName("duration-cards");
+      var durationCards = document.getElementsByClassName("duration-card-wrapper");
       for (var i = 0; durationCards.length > i; i++) {
         durationCards[i].style.display = "none";
       }
+      // this.durationCardsStyle.display = 'none';
 
     },
     calcurateRouteAfterDragging: function(){
-      // console.log("end");
-      // console.log(this.planningPlacesDraggable);
-
       var filteredPlanningPlacesDraggable = [];
       var numOfDailyPlaces = [];
       for (var i = 0; this.planningPlacesDraggable.length > i; i++) {
@@ -197,9 +198,9 @@ export default {
       }
       // console.log(filteredPlanningPlacesDraggable);
       this.$emit('calculateRoute', filteredPlanningPlacesDraggable, numOfDailyPlaces);
-
-      var durationCards = document.getElementsByClassName("duration-cards");
-      for (var i = 0; durationCards.length > i; i++) {
+      //
+      var durationCards = document.getElementsByClassName("duration-card-wrapper");
+      for (var i = 0; durationCardsWrapper.length > i; i++) {
         durationCards[i].style.display = "block";
       }
     },
@@ -221,8 +222,11 @@ export default {
 
 <style scoped>
 
+.tl-itinerary{
+  height:100%;
+}
 
-.itinerary-item-wrapper{
+.place-card-wrapper{
   padding-bottom:8px;
   /* padding-right: 5px; */
   width:calc(100%-55px);
@@ -262,7 +266,7 @@ export default {
    padding:0px;
    /* height:150px; */
  }
- .itinerary-item__image{
+ .place-card__image{
    /* display: inline-block; */
    height:100px;
    width:100px;
@@ -285,21 +289,21 @@ export default {
    font-size: 12px
  }
 
- .itinerary-item__contents__section__category p, .itinerary-item__contents__section__stay p{
+ .place-card__contents__section__category p, .place-card__contents__section__stay p{
    font-size: 10px;
    color:#666666;
  }
 
- .itinerary-item{
+ .place-card{
  }
 
- .itinerary-item__contents{
+ .place-card__contents{
    vertical-align:top;
    height:100px;
    width:calc(100%-100px);
  }
 
- .itinerary-item__contents__section{
+ .place-card__contents__section{
    padding:0 15px 15px 15px;
  }
 
@@ -417,12 +421,6 @@ export default {
    bottom: 20px;
  }
 
- .duration-cards{
-   display: block;
-   opacity: 1;
-   /* transition: display 1s; */
- }
-
  .disable-transition {
     transition: transform 0s;
 }
@@ -430,9 +428,13 @@ export default {
 .sortable-chosen{
   opacity: 1;
 }
+
 .sortable-ghost{
   opacity: .01;
 }
 
+.invisible{
+  display:none;
+}
 
 </style>

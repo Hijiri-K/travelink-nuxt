@@ -35,19 +35,23 @@
 
 <!-- PC,iPad用 -->
       <el-row :gutter="20">
-        <tl-schedule v-bind:percentage="percentage" @childs-event="calculateSchedule"></tl-schedule>
+        <tl-schedule v-bind:percentage="percentage" @childs-event="calculateSchedule">
+        </tl-schedule>
+
         <el-col :sm=12 :xs=24 id="itinerary-box">
           <div id="itinerary-btns-wrapper" class="hidden-xs-only">
             <el-checkbox　id="optimize-itinerary" v-model="optimizeItinerary" @change='clickOptimizeBtn' border>Optimize</el-checkbox>
             <span id="edit-itinerary-btn" @click='editItinerary'>Edit</span>
           </div>
-
-          <tl-itinerary class="itineraryPC" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary" @calculateRoute="calculateRoute" @setAlertMessage="setAlertMessage"></tl-itinerary>
+          <tl-itinerary class="tl-itinerary" ref="itinerary" v-bind:planningPlaces="planningPlaces"　v-bind:planDays="planDays" @tabClick="changeTab" @editItinerary="editItinerary" @calculateRoute="calculateRoute" @setAlertMessage="setAlertMessage">
+          </tl-itinerary>
         </el-col>
+
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
-
-          <tl-itinerary-edit ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" class="itinerary-edit-wrapper"></tl-itinerary-edit>
+          <tl-itinerary-edit class="tl-itinerary-edit" ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" >
+          </tl-itinerary-edit>
         </el-col>
+
         <div id="switch-buttons" class="hidden-sm-and-up">
           <div class="switch-button" @click="changeSpTab('itinerary'), styleObject.transform='translateX(0)'">itinerary</div>
           <div class="switch-button" @click="changeSpTab('itineraryEdit'), styleObject.transform='translateX(100%)'">edit</div>
@@ -67,8 +71,6 @@ body{
   margin:0;
   /* background-color: #f8f8ff; */
 }
-
-
 
 .el-main{
   padding:0 5px 5px 5px !important;
@@ -93,14 +95,8 @@ body{
   z-index: 15;
 }
 
-.itinerary-wrapper-wrapper{
-  margin-bottom: 50px;
-}
-
 #itinerary-box{
   position: fixed;
-  overflow-y: auto;
-  /* top:150px; */
   height: calc(100%-250px);
   transition: width .3s;
 }
@@ -108,7 +104,6 @@ body{
 #itinerary-edit-box{
   position: fixed;
   height: calc(100%-250px);
-  overflow-y:auto;
   left:50%;
   transition: left .3s;
 }
@@ -214,8 +209,6 @@ body{
 /* トランジション関係 */
 .itinerary-transition-item {
   transition: all 0.5s;
-  /* display: inline-block; */
-  /* margin-right: 10px; */
 }
 
 .itinerary-transition-enter, .itinerary-transition-leave-to{
@@ -234,10 +227,6 @@ body{
     color: #303133 !important;
 }
 
-/* .el-range-input {
-    line-height: 27px !important;
-} */
-
 .el-range-editor{
   width:230px !important;
   margin-right: 10px;
@@ -247,18 +236,20 @@ body{
   display: block !important;
   float:left !important;
   width:400px;
+  height:100%;
+  overflow-y: auto;
 }
 
 .el-tabs__content{
   transition: left .3s;
-  /* position: relative; */
-  /* top:60px; */
-  margin-top:60px;
+  margin-top:50px;
+  height:calc(100% - 50px);
 }
 
 .el-tabs{
   overflow-x:hidden !important;
   top:100px;
+  height:100%;
 }
 
 .el-tabs__header {
@@ -651,6 +642,7 @@ export default {
         });
       }
       // console.log(this.planningPlaces)
+      // this.$refs.itinerary.durationCardsStyle.display = 'block';
       this.calcPercentage();
       // }
     },
