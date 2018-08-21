@@ -98,7 +98,7 @@ body{
 #itinerary-box{
   position: fixed;
   height: calc(100%-250px);
-  transition: width .3s;
+  /* transition: width .4s; */
 }
 
 #itinerary-edit-box{
@@ -137,7 +137,7 @@ body{
   width:50%;
   height:2px;
   background-color: #409EFF;
-  transition: transform 0.5s;
+  transition: transform 0.3s;
 }
 
 /* Elementのコンポーネントのレイアウト調整 */
@@ -238,6 +238,9 @@ body{
   width:100%;
   height:100%;
   overflow-y: auto;
+  /* transition: width .4s; */
+  /* transition-delay: .3s;
+  transition-property: width; */
 }
 
 .el-tabs__content{
@@ -286,7 +289,7 @@ body{
   box-sizing: border-box;
   border-radius: 4px;
   text-align: center;
-  transition: background-color .4s;
+  /* transition: background-color .4s; */
 }
 
 #optimize-itinerary{
@@ -387,6 +390,8 @@ var altSelectedPlaces = [];
  * @type {Object}
  */
 var map;
+
+var elTabPaneWidthDevide = 1;
 
 const DAILY_MAX_TOTAL_TIME = 240;
 
@@ -694,8 +699,8 @@ export default {
         elTabPane[i].style.width =  elTabPaneWidth;
       }
 
-      var elTabsLeftPx = tabIndex * -100 + '%'
-      elTabs[0].style.width =  100 * this.planDays.length  + "%" ;
+      var elTabsLeftPx = tabIndex * -100 / elTabPaneWidthDevide + '%'
+      elTabs[0].style.width =  100 * this.planDays.length / elTabPaneWidthDevide  + "%" ;
       elTabs[0].style.left = elTabsLeftPx;
       },
 
@@ -716,11 +721,14 @@ export default {
       var elTabsHeader = document.getElementsByClassName("el-tabs__header");
       var editItineraryBtn = document.getElementById("edit-itinerary-btn");
       var itineraryBtnsWrapper = document.getElementById("itinerary-btns-wrapper");
+      var elTabPane = document.getElementsByClassName("el-tab-pane tlItinerary");
 
       console.log(elTabsHeader);
 
       if (this.editItineraryBtn == false) {
         console.log("edit");
+        elTabPaneWidthDevide = 2;
+        this.changeTab();
         itineraryEditBox.style.left = "100%";
         itineraryBox.style.width = "100%";
         elTabsHeader[0].style.width = "calc(100% - 170px)";
@@ -732,8 +740,11 @@ export default {
         this.optimizeItinerary = false;
         this.$refs.itinerary.draggableOptions.disabled = false;
         this.$refs.itinerary.disableTrandition = true;
+
+
       } else {
         console.log("close");
+        elTabPaneWidthDevide = 1;
         itineraryEditBox.style.left = "50%"
         itineraryBox.style.width = "50%"
         elTabsHeader[0].style.width = "calc(50% - 170px)";
@@ -744,6 +755,7 @@ export default {
         this.editItineraryBtn = false;
         this.$refs.itinerary.draggableOptions.disabled = true;
         this.$refs.itinerary.disableTrandition = false;
+        this.changeTab();
       }
     },
     setAlertMessage: function(message) {
