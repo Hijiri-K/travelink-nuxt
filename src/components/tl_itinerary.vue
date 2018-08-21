@@ -13,7 +13,7 @@
              <div class="time-line__line-wrapper top inline-block">
                <div class="time-line__line bar-top">
                </div>
-                 <span class="time-line__line__dot bar-top__dot"></span>
+               <span class="time-line__line__dot bar-top__dot"></span>
              </div><!--
           --><div class="time-line__time top inline-block">
                <p>{{startTimeShow}}</p>
