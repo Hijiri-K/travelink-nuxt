@@ -34,6 +34,24 @@
 </template>
 
 <style scoped>
+img{
+  height:100px;
+  width:100px;
+  vertical-align: middle;
+}
+
+h3{
+  padding-top:5px;
+  margin: 0;
+  font-size: 16px;
+}
+
+p{
+  margin:0;
+  word-wrap: break-all;
+  font-size: 12px
+}
+
 .tl-itinerary-edit-wrapper{
   height:100%;
   overflow-y: scroll !important;
@@ -58,23 +76,6 @@
    /* display: inline-block; */
    height:100px;
    width:100px;
- }
- img{
-   height:100px;
-   width:100px;
-   vertical-align: middle;
- }
-
- h3{
-   padding-top:5px;
-   margin: 0;
-   font-size: 16px;
- }
-
- p{
-   margin:0;
-   word-wrap: break-all;
-   font-size: 12px
  }
 
  .place-card__contents__section__category p, .place-card__contents__section__stay p{
