@@ -200,7 +200,7 @@ export default {
       this.$emit('calculateRoute', filteredPlanningPlacesDraggable, numOfDailyPlaces);
       //
       var durationCards = document.getElementsByClassName("duration-card-wrapper");
-      for (var i = 0; durationCardsWrapper.length > i; i++) {
+      for (var i = 0; durationCards.length > i; i++) {
         durationCards[i].style.display = "block";
       }
     },
