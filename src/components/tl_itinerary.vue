@@ -245,7 +245,6 @@ p{
 
 .place-card-wrapper{
   padding-bottom:8px;
-  /* padding-right: 5px; */
   width:calc(100%-55px);
 }
  .el-card{

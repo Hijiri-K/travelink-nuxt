@@ -529,7 +529,7 @@ export default {
 
                 } else {
                   var numOfDailyPlaces = numsOfDailyPlaces[numOfDailyPlacesIndex];
-                  console.log("numOfDailyPlaces: " + numOfDailyPlaces);
+                  // console.log("numOfDailyPlaces: " + numOfDailyPlaces);
                     if (numOfDailyPlaces == i2 || i == selectedPlaces.length - 1 ) {
                       planningPlaces.push(dailyPlanningPlaces);
                       dailyPlanningPlaces = [];
@@ -638,15 +638,13 @@ export default {
             	}
             });
 
-          }//テスト用
+          }
 
           } else {
             window.alert('Directions request failed due to ' + status);
           }
         });
       }
-      // console.log(this.planningPlaces)
-      // this.$refs.itinerary.durationCardsStyle.display = 'block';
       this.calcPercentage();
       // }
     },
@@ -728,7 +726,6 @@ export default {
       if (this.editItineraryBtn == false) {
         console.log("edit");
         elTabPaneWidthDevide = 2;
-        this.changeTab();
         itineraryEditBox.style.left = "100%";
         itineraryBox.style.width = "100%";
         elTabsHeader[0].style.width = "calc(100% - 170px)";
@@ -740,7 +737,7 @@ export default {
         this.optimizeItinerary = false;
         this.$refs.itinerary.draggableOptions.disabled = false;
         this.$refs.itinerary.disableTrandition = true;
-
+        this.changeTab();
 
       } else {
         console.log("close");
@@ -780,6 +777,7 @@ export default {
   beforeMount: function(){
     console.log("boforeMount");
   },
+
   beforeDestroy: function () {
 
  }
