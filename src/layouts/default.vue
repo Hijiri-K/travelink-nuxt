@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-wrapper">
 
         <el-header>
           <tl-header>
@@ -19,7 +19,21 @@
     }}
 </script>
 <style>
+#__nuxt{
+  height:100%;
+}
 
+#__layout{
+  height:100%;
+}
+
+.page-wrapper{
+  height:100%;
+}
+
+.el-container{
+  height:100%;
+}
 .el-header{
   background-color: #63A375;
   height:40px !important;
@@ -29,6 +43,7 @@
 }
 
 html {
+  height:100%;
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
@@ -37,6 +52,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+}
+
+body{
+  height: 100%;
 }
 
 *, *:before, *:after {

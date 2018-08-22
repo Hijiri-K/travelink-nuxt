@@ -1,39 +1,46 @@
 <!-- ここのファイルでコンポーネントをまとめると、変数の受け渡しに不便が生じるので、コンポーネントをplanning.jsで読み込む形式に変更 -->
 
 <template>
-  <div class="">
-    <div class="locations-wrapper" :style="{ height: pageHeight }">
-      <el-row type="flex" class="locations-row" :gutter="10" >
+  <div class="top-wrapper">
+    <div class="locations-wrapper">
+
+      <el-row type="flex" class="locations-row upper" :gutter="10" >
         <el-col :span=12 class="location">
-          <div class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image1 + ')' }">
+                <h3 class="location-title">別府</h3>
+              </router-link>
             </el-card>
-          </div>
         </el-col>
+
         <el-col :span=12 class="location">
-          <div class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image2 + ')' }">
+                <h3 class="location-title">鳥取</h3>
+              </router-link>
             </el-card>
-          </div>
         </el-col>
+
       </el-row>
+
       <el-row type="flex" class="locations-row" :gutter="10">
+
         <el-col :span=12 class="location">
-          <div class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image3 + ')' }">
+                <h3 class="location-title">長野</h3>
+              </router-link>
             </el-card>
-          </div>
         </el-col>
+
         <el-col :span=12 class="location">
-          <div class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image4 + ')' }">
+                <h3 class="location-title">滋賀</h3>
+              </router-link>
             </el-card>
-          </div>
         </el-col>
+
       </el-row>
     </div>
     <div class="">
@@ -43,36 +50,57 @@
 </template>
 
 <style>
+.top-wrapper{
+  height:100%;
+  width:100%;
+}
 .locations-wrapper{
   box-sizing:border-box;
   margin-top: 40px;
   padding:10px 10px 10px 10px;
-  /* height:80%; */
+  height:calc(100%-100px);
   width:100%;
 }
 
 .locations-row{
   /* box-sizing:border-box; */
   height:50%;
-  margin:0 0 10px 0;
+  /* margin:0 0 10px 0; */
 }
+
+.locations-row.upper{
+  /* box-sizing:border-box; */
+  margin-bottom: 10px;
+  /* margin:0 0 10px 0; */
+}
+
 
 .location{
   /* margin:20px; */
   height:100%;
+  width:50%;
+}
+
+.el-card__body{
+  height: 100%;
+  width:100%;
 }
 
 .location-pictures{
   /* height:100%; */
   /* background-color: green; */
   height:100%;
-
+  width:100%;
+  background-size: cover;
 }
 
-img{
-  max-height:100%;
-  width:100%;
-  vertical-align: text-bottom;
+.location-title{
+  text-align: center;
+  vertical-align: middle;
+  font-size: 60px;
+  color: #fff;
+  opacity: 0.85;
+  padding-top: 110px;
 }
 
 .shuffle-btn{
@@ -87,13 +115,16 @@ var pageHeight;
 export default{
   data() {
     return {
-      pageHeight: pageHeight
+      image1:"https://www.japan-guide.com/thumb/XYZeXYZe4701_375.jpg",
+      image2:"https://media-assets.aumo.jp/uploads/photo/upload_photo/data/3609/xlarge_a8304841-e0b3-4ea3-ba61-bd20a22534ac.jpeg",
+      image3:"http://triplovers.jp/hokushinetsu/wp-content/uploads/2017/11/%EF%BC%95-1.jpg",
+      image4:"https://image.gnst.jp/v1/gurutabi/public/img/article/f7/75/art001467/article_art001467_11.jpg?20170301151700&w=600"
     }
   },
-  mounted: function(){
-    this.pageHeight = window.parent.screen.height - 110 + 'px';
-    console.log(this.pageHeight)
-  }
+  // mounted: function(){
+  //   this.pageHeight = window.parent.screen.height - 110 + 'px';
+  //   console.log(this.pageHeight)
+  // }
 }
 
 </script>
