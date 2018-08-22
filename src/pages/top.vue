@@ -8,7 +8,7 @@
         <el-col :span=12 class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
               <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image1 + ')' }">
-                <h3 class="location-title">別府</h3>
+                <h3 class="location-title">Beppu</h3>
               </router-link>
             </el-card>
         </el-col>
@@ -16,7 +16,7 @@
         <el-col :span=12 class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
               <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image2 + ')' }">
-                <h3 class="location-title">鳥取</h3>
+                <h3 class="location-title">Tottori</h3>
               </router-link>
             </el-card>
         </el-col>
@@ -28,7 +28,7 @@
         <el-col :span=12 class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
               <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image3 + ')' }">
-                <h3 class="location-title">長野</h3>
+                <h3 class="location-title">Nagano</h3>
               </router-link>
             </el-card>
         </el-col>
@@ -36,7 +36,7 @@
         <el-col :span=12 class="location">
             <el-card :body-style="{ padding: '0px' }" class="location-pictures">
               <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image4 + ')' }">
-                <h3 class="location-title">滋賀</h3>
+                <h3 class="location-title">Shiga</h3>
               </router-link>
             </el-card>
         </el-col>
