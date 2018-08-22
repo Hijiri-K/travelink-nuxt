@@ -87,20 +87,19 @@
 }
 
 .location-pictures{
-  /* height:100%; */
-  /* background-color: green; */
   height:100%;
   width:100%;
   background-size: cover;
+  display: flex;
+justify-content: center;
+align-items: center;
+
 }
 
 .location-title{
-  text-align: center;
-  vertical-align: middle;
   font-size: 60px;
   color: #fff;
   opacity: 0.85;
-  padding-top: 110px;
 }
 
 .shuffle-btn{
