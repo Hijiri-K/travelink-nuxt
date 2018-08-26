@@ -142,7 +142,14 @@ export default {
         editable:false,
         tabIndex:0,
         planningPlacesDraggable:this.planningPlaces,
-        draggableOptions:{group : "plan", animation:300, disabled:true, forceFallback:true, delay:50},
+        draggableOptions:{
+          group : "plan",
+          animation:300,
+          disabled:true,
+          forceFallback:true,
+          delay:50,
+          scroll: true
+        },
         disableTrandition:false,
         durationCardsStyle:{
           display:'block',
