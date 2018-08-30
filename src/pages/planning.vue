@@ -511,7 +511,7 @@ export default {
                 dailyPlanningPlaces.push(selectedPlaces[place_idIndex]);
 
                 if (durationBetweenPlaces != 0) {
-                  dailyPlanningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: totalDuration})
+                  dailyPlanningPlaces.push({id: durationId, duration: durationBetweenPlaces, startTime: totalDuration, price:0})
                 }
 
                 //numsOfDailyPlacesがundefinedの場合（itineraryのcalcurateRouteAfterDragging以外から呼び出された場合）
@@ -624,12 +624,12 @@ export default {
 
                   //宿泊先とそこまでの移動時間を追加
                   var deletedDuration = planningPlaces[i].pop();
-                  planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime - deletedDuration.duration + lastPlaceToHotelDurations[nearestHotelIndex]});
+                  planningPlaces[i].push({id: deletedDuration.id, duration:lastPlaceToHotelDurations[nearestHotelIndex] , startTime: deletedDuration.startTime - deletedDuration.duration + lastPlaceToHotelDurations[nearestHotelIndex], price: 0});
                   planningPlaces[i].push(nearestHotel);
 
                   //宿泊の次の日の予定の最初にホテルと移動時間を追加
                   var hotelToFirstPlaceDuration =  Math.round(response.rows[i + origins.length / 2].elements[nearestHotelIndex].duration.value / 60);
-                  planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration});//IDが被らないように100を足す
+                  planningPlaces[i + 1].unshift({id: deletedDuration.id + 100, duration:hotelToFirstPlaceDuration , startTime:hotelToFirstPlaceDuration, price:0});//IDが被らないように100を足す
                   planningPlaces[i + 1].unshift(nearestHotel);
 
                   //最初にホテルを追加したことによるタイムラインのずれを修正
