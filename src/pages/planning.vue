@@ -649,8 +649,7 @@ export default {
           }
         });
       }
-      this.calcPercentage();
-      // }
+      setTimeout(this.calcPercentage, 1000)
     },
 
     /**
@@ -675,13 +674,22 @@ export default {
      *
      */
     calcPercentage: function(){
-      //選択された地点の合計時間の占有割合を算出
       this.percentage = 0; //時間の割合をリセット
-      var totalTime = 0; //合計時間をリセット
-      for (var place of altSelectedPlaces) {
-        var staying = place['staying'];
-        var stayNights = this.planDays.length;
-        var maxTime = DAILY_MAX_TOTAL_TIME * stayNights;
+      var totalTime = 0; //合計時間を定義
+      var stayNights = this.planDays.length; //日数を代入
+      var maxTime = DAILY_MAX_TOTAL_TIME * stayNights; //パーセンテージの母数を計算
+
+      var flattenPlanningPlaces = this.planningPlaces.reduce(function (p, c) { //多次元連想配列を一次元連想配列に変換
+        return p.concat(c);
+      })
+
+      for (var place of flattenPlanningPlaces) {
+        if (place['staying'] != undefined) {
+          var staying = place['staying']; //行先配列の場合は滞在時間を代入
+        } else {
+          var staying = place['duration']; //移動時間配列の場合は移動時間を代入
+        }
+        console.log(staying)
         totalTime += staying;
         this.percentage = Math.round(totalTime / maxTime * 100);
       }
