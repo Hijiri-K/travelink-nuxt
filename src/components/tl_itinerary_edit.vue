@@ -93,7 +93,7 @@ p{
  }
 
  .place-card__contents__section{
-   padding:0 15px 15px 15px;
+   padding:0 15px;
  }
 
  .inline-block{
