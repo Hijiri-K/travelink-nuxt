@@ -4,48 +4,41 @@
   <div class="top-wrapper">
     <div class="locations-wrapper">
 
-      <el-row type="flex" class="locations-row upper" :gutter="10" >
-        <el-col :span=12 class="location">
-            <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image1 + ')' }">
-                <h3 class="location-title">Beppu</h3>
-              </router-link>
-            </el-card>
-        </el-col>
+        <div class="location">
+          <el-card :body-style="{ padding: '0px' }" class="location-pictures">
+            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image1 + ')' }">
+              <h3 class="location-title">Beppu</h3>
+            </router-link>
+          </el-card>
+        </div>
 
-        <el-col :span=12 class="location">
-            <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image2 + ')' }">
-                <h3 class="location-title">Tottori</h3>
-              </router-link>
-            </el-card>
-        </el-col>
+        <div class="location">
+          <el-card :body-style="{ padding: '0px' }" class="location-pictures">
+            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image2 + ')' }">
+              <h3 class="location-title">Tottori</h3>
+            </router-link>
+          </el-card>
+        </div>
 
-      </el-row>
+        <div class="location">
+          <el-card :body-style="{ padding: '0px' }" class="location-pictures">
+            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image3 + ')' }">
+              <h3 class="location-title">Nagano</h3>
+            </router-link>
+          </el-card>
+        </div>
 
-      <el-row type="flex" class="locations-row" :gutter="10">
-
-        <el-col :span=12 class="location">
-            <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image3 + ')' }">
-                <h3 class="location-title">Nagano</h3>
-              </router-link>
-            </el-card>
-        </el-col>
-
-        <el-col :span=12 class="location">
-            <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-              <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image4 + ')' }">
-                <h3 class="location-title">Shiga</h3>
-              </router-link>
-            </el-card>
-        </el-col>
-
-      </el-row>
+        <div class="location">
+          <el-card :body-style="{ padding: '0px' }" class="location-pictures">
+            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image4 + ')' }">
+              <h3 class="location-title">Shiga</h3>
+            </router-link>
+          </el-card>
+        </div>
     </div>
-    <div class="">
+    <!-- <div class="">
       <el-button class="shuffle-btn" type="success" round>Shuffle</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -57,28 +50,16 @@
 .locations-wrapper{
   box-sizing:border-box;
   margin-top: 40px;
-  padding:10px 10px 10px 10px;
-  height:calc(100%-100px);
+  padding:10px 5px 0 5px;
+  height:calc(100%-40px);
   width:100%;
 }
 
-.locations-row{
-  /* box-sizing:border-box; */
-  height:50%;
-  /* margin:0 0 10px 0; */
-}
-
-.locations-row.upper{
-  /* box-sizing:border-box; */
-  margin-bottom: 10px;
-  /* margin:0 0 10px 0; */
-}
-
-
 .location{
-  /* margin:20px; */
-  height:100%;
+  padding:0 5px 10px 5px;
+  height:50%;
   width:50%;
+  display: inline-block;
 }
 
 .el-card__body{
@@ -91,9 +72,8 @@
   width:100%;
   background-size: cover;
   display: flex;
-justify-content: center;
-align-items: center;
-
+  justify-content: center;
+  align-items: center;
 }
 
 .location-title{
