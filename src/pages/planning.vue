@@ -616,11 +616,11 @@ export default {
             			for (var j = 0; j<results.length; j++) {
             				var duration = Math.round(results[j].duration.value / 60); // 時間
             				var distance = results[j].distance.value; // 距離
-                    lastPlaceToHotelDurations.push(duration)
+                    lastPlaceToHotelDurations.push(duration);
             			}
 
                   //一番近いホテルの取得
-                  var nearestHotelIndex = lastPlaceToHotelDurations.indexOf(Math.min.apply(null,lastPlaceToHotelDurations))
+                  var nearestHotelIndex = lastPlaceToHotelDurations.indexOf(Math.min.apply(null,lastPlaceToHotelDurations));
                   var nearestHotel = hotels[nearestHotelIndex];
 
                   //宿泊先とそこまでの移動時間を追加
@@ -650,7 +650,7 @@ export default {
           }
         });
       }
-      setTimeout(this.calcPercentage, 1000)
+      setTimeout(this.calcPercentage, 1000);
       setTimeout(this.calcTotalPrice, 1000);
     },
 
@@ -696,7 +696,7 @@ export default {
         this.percentage = Math.round(totalTime / maxTime * 100);
       }
       if (this.percentage > 100) {
-        this.setAlertMessage("Too many schedules. Please add more days.")
+        this.setAlertMessage("Too many schedules. Please add more days.");
       }
     },
 
@@ -783,7 +783,7 @@ export default {
     },
     setAlertMessage: function(message) {
       this.alertMessage = message;
-      setTimeout(this.removeAlertMessage,3000)
+      setTimeout(this.removeAlertMessage,3000);
     },
     removeAlertMessage: function(){
       this.alertMessage = null;
@@ -800,7 +800,7 @@ export default {
 
   mounted: function(){
     console.log("mounted");
-    this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces, false)
+    this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces, false);
   },
 
   beforeMount: function(){
