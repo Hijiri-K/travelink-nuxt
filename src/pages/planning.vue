@@ -355,9 +355,9 @@ import TlInfoFooter from '../components/tl_info_footer.vue'
  * ホテルの選択肢の配列（BD化）
  * @type {Array}
  */
-var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", type:'hotel', title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}},
-              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", type:'hotel', title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}},
-              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", type:'hotel', title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}},
+var hotels = [{ id:1, place_id:"ChIJO3FL6menRjURgLiDwXzEebU", type:'hotel', title: '潮騒の宿　晴海', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.317766, lng: 131.500177}, image_url:'https://www.premium-j.jp/wp/wp-content/uploads/rd850_028_02.jpg'},
+              { id:2, place_id:"ChIJvSfzzN2mRjURvtYsFM2Hs8w", type:'hotel', title: '山田別荘', group: '宿', staying:0, discription: '晴海で世界最高峰のサービスを体験。', price: 120, currency:"$", location:{lat:33.282059, lng: 131.503630}, image_url:'https://ferret-one.akamaized.net/images/5aab1c2a922938621b00043d/normal.jpeg'},
+              { id:3, place_id:"ChIJE7scRFymRjURjxfcE67NO80", type:'hotel', title: '杉乃井ホテル', group: '温泉', staying:0, discription: '別府温泉郷・観海寺温泉の高台に位置する、３世代で楽しめる温泉リゾートホテルです。', price: 120, currency:"$", location:{lat:33.283696,lng:131.475077}, image_url:'https://cdn.jalan.jp/jalan/images/pictL/Y0/Y344350/Y344350As6.jpg'},
               ]
 
 /**
