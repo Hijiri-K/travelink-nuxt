@@ -420,7 +420,8 @@ export default {
           styleObject: {transform: 'translateX(0)'},
           editItineraryBtn:false,
           optimizeItinerary:true,
-          alertMessage:null
+          alertMessage:null,
+          totalPrice:0
       }
     },
     methods: {
@@ -650,6 +651,7 @@ export default {
         });
       }
       setTimeout(this.calcPercentage, 1000)
+      setTimeout(this.calcTotalPrice, 1000);
     },
 
     /**
@@ -697,6 +699,18 @@ export default {
         this.setAlertMessage("Too many schedules. Please add more days.")
       }
     },
+
+    calcTotalPrice: function(){
+      this.totalPrice = 0;
+      var flattenPlanningPlaces = this.planningPlaces.reduce(function (p, c) {　//多次元連想配列を一次元連想配列に変換
+        return p.concat(c);
+      });
+      for (var place of flattenPlanningPlaces) {
+        var price = place['price'];
+        this.totalPrice += price;
+      }
+      console.log(this.totalPrice);
+},
 
     changeTab: function(){
       var tabIndex = this.$refs.itinerary.tabIndex;
