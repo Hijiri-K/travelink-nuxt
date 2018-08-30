@@ -339,11 +339,11 @@ import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
  * 観光地の選択肢の配列（BD化）
  * @type {Array}
  */
-var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", type:'place',title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, default: true},
-              { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", type:'place', title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, default: true},
-              { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", type:'place', title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, default: false},
-              { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", type:'place', title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, default: true},
-              { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", type:'place', title: '城島高原パーク', group: '宿', staying:180, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, default: false},
+ var places = [{ id:1, place_id:"ChIJoa3m8WSfRjUReaWY4_9UohE", type:'place',title: '別府駅', group: '駅', staying:30, discription: '別府駅です。', price: 120, currency:"$", location:{lat:33.233358, lng:131.606644}, image_url:'http://photos.wikimapia.org/p/00/02/80/51/28_big.jpg', default: true},
+               { id:2, place_id: "ChIJ3xRR5tmtRjURfacmU4XGHvQ", type:'place', title: '湯布院', group: '食べ歩き', staying:180, discription: '豊後富士と呼ばれる美しい由布岳の山麓に広がり、全国2位の湯量を誇る人気温泉地。', price: 60, currency:"$", location:{lat:33.262623,lng:131.357272}, image_url:'https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610', default: true},
+               { id:3, place_id:"ChIJs3-vWz6hRjUR3g9LwnSoWRo", type:'place', title: 'うみたまご', group: '水族館', staying:60, discription: '海の生き物とふれあえるテーマパークです。', price: 30, currency:"$", location:{lat:33.258607,lng:131.535934}, image_url:'http://www.hotelsunvalley.com/spot/wp-content/uploads/sites/6/2016/01/plan7-720x478.jpg', default: false},
+               { id:4, place_id:"ChIJg03qY32uRjURMT_ayA1n4yE", type:'place', title: '金鱗湖', group: '湖', staying:120, discription: '大分川の源流のひとつであり、この池に朝霧がかかる風景は由布院温泉を代表する景観となっている。', price: 30, currency:"$", location:{lat:33.266685, lng:131.369048}, image_url:'https://sp.jorudan.co.jp/leaf/images/spot/640/J0137_2.jpg', default: true},
+               { id:5, place_id:"ChIJxWpZw0OvRjUReEV7lBzqj2k", type:'place', title: '城島高原パーク', group: '宿', staying:180, discription: '国内初の木製ジェット コースターと季節限定の屋外スケートリンクがある遊園地。', price: 120, currency:"$", location:{lat:33.266971,lng:131.426408}, image_url:'https://ms-cache.walkerplus.com/walkertouch/wtd/images/l2/8834.jpg', default: false},
               ]
 /**
  * ホテルの選択肢の配列（BD化）

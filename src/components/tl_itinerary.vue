@@ -48,7 +48,7 @@
             --><div class="place-card-wrapper inline-block">
                  <el-card :body-style="{ padding: '0px' }" class="place-card"><!--
                     --><div class="place-card__image inline-block">
-                         <img src="https://cdn.4travel.jp/img/tcs/t/album/src/10/40/47/src_10404771.jpg?1259494610">
+                         <img :src="place.image_url">
                        </div><!--
                     --><div class="place-card__contents inline-block">
                          <section class="place-card__contents__section">
