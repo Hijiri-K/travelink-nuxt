@@ -6,32 +6,32 @@
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image1 + ')' }">
-              <h3 class="location-title">Beppu</h3>
+            <router-link tag="div" :to="locations[0].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[0].image + ')' }">
+              <h3 class="location-title">{{locations[0].title}}</h3>
             </router-link>
           </el-card>
         </div>
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image2 + ')' }">
-              <h3 class="location-title">Tottori</h3>
+            <router-link tag="div" :to="locations[1].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[1].image + ')' }">
+              <h3 class="location-title">{{locations[1].title}}</h3>
             </router-link>
           </el-card>
         </div>
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image3 + ')' }">
-              <h3 class="location-title">Nagano</h3>
+            <router-link tag="div" :to="locations[2].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[2].image + ')' }">
+              <h3 class="location-title">{{locations[2].title}}</h3>
             </router-link>
           </el-card>
         </div>
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" to="/planning" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + image4 + ')' }">
-              <h3 class="location-title">Shiga</h3>
+            <router-link tag="div" :to="locations[3].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[3].image + ')' }">
+              <h3 class="location-title">{{locations[3].title}}</h3>
             </router-link>
           </el-card>
         </div>
@@ -92,6 +92,13 @@
 export default{
   data() {
     return {
+      locations:[
+        {title:"Beppu", image:"https://www.japan-guide.com/thumb/XYZeXYZe4701_375.jpg", url:"/planning"},
+        {title:"Tottori", image:"https://media-assets.aumo.jp/uploads/photo/upload_photo/data/3609/xlarge_a8304841-e0b3-4ea3-ba61-bd20a22534ac.jpeg", url:"/planning"},
+        {title:"Nagano", image:"http://triplovers.jp/hokushinetsu/wp-content/uploads/2017/11/%EF%BC%95-1.jpg", url:"/planning"},
+        {title:"Shiga", image:"https://image.gnst.jp/v1/gurutabi/public/img/article/f7/75/art001467/article_art001467_11.jpg?20170301151700&w=600", url:"/planning"},
+      ],
+
       image1:"https://www.japan-guide.com/thumb/XYZeXYZe4701_375.jpg",
       image2:"https://media-assets.aumo.jp/uploads/photo/upload_photo/data/3609/xlarge_a8304841-e0b3-4ea3-ba61-bd20a22534ac.jpeg",
       image3:"http://triplovers.jp/hokushinetsu/wp-content/uploads/2017/11/%EF%BC%95-1.jpg",
