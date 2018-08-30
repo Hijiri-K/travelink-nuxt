@@ -48,7 +48,7 @@
         </el-col>
 
         <el-col :sm=12 :xs=24 id="itinerary-edit-box">
-          <tl-itinerary-edit class="tl-itinerary-edit hidden-xs-only" ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" >
+          <tl-itinerary-edit class="tl-itinerary-edit hidden-xs-only" ref="itineraryEdit" v-bind:places="places" @calculateRoute="calculateRoute" @showModal="showModal" >
           </tl-itinerary-edit>
         </el-col>
 
@@ -61,7 +61,9 @@
 
     </el-main>
     <el-alert v-if="alertMessage != null " :title="alertMessage" type="warning">
-</el-alert>
+    </el-alert>
+    <tl-modal ref="modal">
+    </tl-modal>
   </el-container>
 </template>
 
@@ -334,6 +336,7 @@ import TlVideoChat from '../components/tl_video_chat.vue'
 import TlMap from '../components/tl_map.vue'
 import TlItinerary from '../components/tl_itinerary.vue'
 import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
+import TlModal from '../components/tl_modal.vue'
 
 /**
  * 観光地の選択肢の配列（BD化）
@@ -402,7 +405,8 @@ export default {
     TlVideoChat,
     TlMap,
     TlItinerary,
-    TlItineraryEdit
+    TlItineraryEdit,
+    TlModal,
   },
 
   data() {
@@ -766,6 +770,9 @@ export default {
       if (this.optimizeItinerary == true) {
         this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces);
       }
+    },
+    showModal: function(place){
+      this.$refs.modal.showModal(place);
     }
   },
 

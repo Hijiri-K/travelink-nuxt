@@ -7,10 +7,10 @@
             <div class="check-box-wrapper inline-block">
                 <div class="tl-checkbox"><el-checkbox class="itinerary-edit-checkbox" v-bind:label="place" name="" :checked="place.default" @change='changeSelectedPlaces'></el-checkbox></div>
             </div><!--
-             --><div class="place-card__image inline-block">
+             --><div class="place-card__image inline-block" @click='$emit("showModal", place)'>
                   <img :src="place.image_url">
                 </div><!--
-             --><div class="place-card__contents inline-block">
+             --><div class="place-card__contents inline-block"  @click='$emit("showModal", place)'>
                   <section class="place-card__contents__section">
                     <h3>{{place.title}}</h3>
                     <div class="place-card__contents__section__category">
