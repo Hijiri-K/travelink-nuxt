@@ -109,8 +109,6 @@ align-items: center;
 </style>
 
 <script>
-import Vue from 'vue/dist/vue.esm'
-var pageHeight;
 export default{
   data() {
     return {
@@ -120,10 +118,6 @@ export default{
       image4:"https://image.gnst.jp/v1/gurutabi/public/img/article/f7/75/art001467/article_art001467_11.jpg?20170301151700&w=600"
     }
   },
-  // mounted: function(){
-  //   this.pageHeight = window.parent.screen.height - 110 + 'px';
-  //   console.log(this.pageHeight)
-  // }
 }
 
 </script>
