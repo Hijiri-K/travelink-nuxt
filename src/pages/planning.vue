@@ -60,6 +60,8 @@
       </el-row>
 
     </el-main>
+    <tl-info-footer v-bind:totalPrice="totalPrice">
+    </tl-info-footer>
     <el-alert v-if="alertMessage != null " :title="alertMessage" type="warning">
     </el-alert>
     <tl-modal ref="modal">
@@ -337,6 +339,7 @@ import TlMap from '../components/tl_map.vue'
 import TlItinerary from '../components/tl_itinerary.vue'
 import TlItineraryEdit from '../components/tl_itinerary_edit.vue'
 import TlModal from '../components/tl_modal.vue'
+import TlInfoFooter from '../components/tl_info_footer.vue'
 
 /**
  * 観光地の選択肢の配列（BD化）
@@ -407,6 +410,7 @@ export default {
     TlItinerary,
     TlItineraryEdit,
     TlModal,
+    TlInfoFooter,
   },
 
   data() {
