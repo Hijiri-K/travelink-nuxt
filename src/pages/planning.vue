@@ -101,15 +101,16 @@ body{
 
 #itinerary-box{
   position: fixed;
-  height: calc(100%-250px);
-  /* transition: width .4s; */
+  height: calc(100%-265px);
+  padding-bottom: 50px;
 }
 
 #itinerary-edit-box{
   position: fixed;
-  height: calc(100%-250px);
+  height: calc(100%-265px);
   left:50%;
   transition: left .3s;
+  padding-bottom: 50px;
 }
 
 /* タブ切り替えボタン */
