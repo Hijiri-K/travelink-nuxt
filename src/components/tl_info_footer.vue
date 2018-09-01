@@ -4,7 +4,7 @@
     <div class="total-price">
       <p>Total price:</p> <p>${{totalPrice}}</p>
     </div>
-    <div id="book-btn">Book Trip</div>
+    <router-link tag="div" :to="{name:'itineraryConfirm', params:{planningPlaces:planningPlaces}}" id="book-btn">Book Trip</router-link>
   </div>
 </div>
 </template>
@@ -50,7 +50,7 @@
  </style>
  <script>
 export default {
-  props: ['totalPrice'],
+  props: ['totalPrice','planningPlaces'],
   data() {
     return {
     }

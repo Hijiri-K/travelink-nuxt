@@ -60,7 +60,7 @@
       </el-row>
 
     </el-main>
-    <tl-info-footer v-bind:totalPrice="totalPrice">
+    <tl-info-footer v-bind:totalPrice="totalPrice" v-bind:planningPlaces="planningPlaces">
     </tl-info-footer>
     <el-alert v-if="alertMessage != null " :title="alertMessage" type="warning">
     </el-alert>
