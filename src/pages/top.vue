@@ -6,7 +6,7 @@
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" :to="locations[0].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[0].image + ')' }">
+            <router-link tag="div" :to="{name:'planning', params:{area:locations[0].title}}" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[0].image + ')' }">
               <h3 class="location-title">{{locations[0].title}}</h3>
             </router-link>
           </el-card>
@@ -14,7 +14,7 @@
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" :to="locations[1].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[1].image + ')' }">
+            <router-link tag="div" :to="{name:'planning', params:{area:locations[1].title}}" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[1].image + ')' }">
               <h3 class="location-title">{{locations[1].title}}</h3>
             </router-link>
           </el-card>
@@ -22,7 +22,7 @@
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" :to="locations[2].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[2].image + ')' }">
+            <router-link tag="div" :to="{name:'planning', params:{area:locations[2].title}}" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[2].image + ')' }">
               <h3 class="location-title">{{locations[2].title}}</h3>
             </router-link>
           </el-card>
@@ -30,7 +30,7 @@
 
         <div class="location">
           <el-card :body-style="{ padding: '0px' }" class="location-pictures">
-            <router-link tag="div" :to="locations[3].url" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[3].image + ')' }">
+            <router-link tag="div" :to="{name:'planning', params:{area:locations[3].title}}" class="location-pictures" v-bind:style="{ 'background-image': 'url(' + locations[3].image + ')' }">
               <h3 class="location-title">{{locations[3].title}}</h3>
             </router-link>
           </el-card>

@@ -805,6 +805,11 @@ export default {
 
   mounted: function(){
     console.log("mounted");
+    console.log(this.$route.params.area);
+    if (this.$route.params.area != undefined) { //セッションに選択エリアの保存（ブラウザを更新しても消えないように）
+      sessionStorage.setItem('area', this.$route.params.area);
+    }
+    console.log(window.sessionStorage);
     this.calculateRoute(this.$refs.itineraryEdit.selectedPlaces, false);
   },
 
