@@ -36,7 +36,7 @@
           </el-card>
         </div>
     </div>
-    <!-- <div class="">
+    <!-- <div class=""> //現状ではデータベースの数が少ない為、コメントアウト。復活の際には.locations-wrapperのheightの修正が必要
       <el-button class="shuffle-btn" type="success" round>Shuffle</el-button>
     </div> -->
   </div>
