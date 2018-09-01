@@ -98,11 +98,6 @@ export default{
         {title:"Nagano", image:"http://triplovers.jp/hokushinetsu/wp-content/uploads/2017/11/%EF%BC%95-1.jpg", url:"/planning"},
         {title:"Shiga", image:"https://image.gnst.jp/v1/gurutabi/public/img/article/f7/75/art001467/article_art001467_11.jpg?20170301151700&w=600", url:"/planning"},
       ],
-
-      image1:"https://www.japan-guide.com/thumb/XYZeXYZe4701_375.jpg",
-      image2:"https://media-assets.aumo.jp/uploads/photo/upload_photo/data/3609/xlarge_a8304841-e0b3-4ea3-ba61-bd20a22534ac.jpeg",
-      image3:"http://triplovers.jp/hokushinetsu/wp-content/uploads/2017/11/%EF%BC%95-1.jpg",
-      image4:"https://image.gnst.jp/v1/gurutabi/public/img/article/f7/75/art001467/article_art001467_11.jpg?20170301151700&w=600"
     }
   },
 }
